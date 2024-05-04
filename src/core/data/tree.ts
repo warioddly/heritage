@@ -370,7 +370,176 @@ export const treeData: TreeDefinition = {
                 type: 'parent',
                 source: '42',
             }
-        }
+        },
+        {
+            data: {
+                id: '44',
+                label: 'Бакы Бий',
+                type: 'parent',
+                source: '29',
+            }
+        },
+        {
+            data: {
+                id: '45',
+                label: 'Атаке',
+                type: 'parent',
+                source: '44',
+            }
+        },
+        {
+            data: {
+                id: '46',
+                label: 'Куттуксейит (Улуу Кыйра)',
+                type: 'parent',
+                source: '44',
+            }
+        },
+        {
+            data: {
+                id: '47',
+                label: 'Кубаныч (Орто Кыйра)',
+                type: 'parent',
+                source: '44',
+            }
+        },
+        {
+            data: {
+                id: '48',
+                label: 'Меңдуулат (Бала Кыйра)',
+                type: 'parent',
+                source: '44',
+            }
+        },
+        {
+            data: {
+                id: '49',
+                label: 'Мангазы',
+                type: 'parent',
+                source: '48',
+            }
+        },
+        {
+            data: {
+                id: '50',
+                label: 'Дуулатказы',
+                type: 'parent',
+                source: '49',
+            }
+        },
+        {
+            data: {
+                id: '51',
+                label: 'Карач',
+                type: 'parent',
+                source: '49',
+            }
+        },
+        {
+            data: {
+                id: '52',
+                label: 'Намас',
+                type: 'parent',
+                source: '49',
+            }
+        },
+        {
+            data: {
+                id: '53',
+                label: 'Ногой',
+                type: 'parent',
+                source: '49',
+            }
+        },
+        {
+            data: {
+                id: '54',
+                label: 'Көжөбаш',
+                type: 'parent',
+                source: '49',
+            }
+        },
+        {
+            data: {
+                id: '55',
+                label: 'Абышка (Чолок этек)',
+                type: 'parent',
+                source: '49',
+            }
+        },
+        {
+            data: {
+                id: '56',
+                label: 'Бектен',
+                type: 'parent',
+                source: '55',
+            }
+        },
+        {
+            data: {
+                id: '57',
+                label: 'Кулболот',
+                type: 'parent',
+                source: '55',
+            }
+        },
+        {
+            data: {
+                id: '58',
+                label: 'Турпанбай',
+                type: 'parent',
+                source: '57',
+            }
+        },
+        {
+            data: {
+                id: '59',
+                label: 'Чегиртке',
+                type: 'parent',
+                source: '57',
+            }
+        },
+        {
+            data: {
+                id: '60',
+                label: 'Көгүчү',
+                type: 'parent',
+                source: '57',
+            }
+        },
+        {
+            data: {
+                id: '61',
+                label: 'Сарыбай',
+                type: 'parent',
+                source: '57',
+            }
+        },
+        {
+            data: {
+                id: '62',
+                label: 'Жаналик',
+                type: 'parent',
+                source: '61',
+            }
+        },
+        {
+            data: {
+                id: '63',
+                label: 'Жамгырчы',
+                type: 'parent',
+                source: '62',
+            }
+        },
+        {
+            data: {
+                id: '64',
+                label: 'Жакшылык',
+                type: 'parent',
+                source: '62',
+            }
+        },
+
     ],
     edges: [],
 };

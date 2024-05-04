@@ -6,8 +6,9 @@ import dagre from 'cytoscape-dagre';
 import cytoscape from "cytoscape";
 import {treeData} from "@/core/data/tree";
 import {createTreeEdge} from "@/core/utils/utils";
-import { TreeNodeDefinition } from "@/core/types/tree-definition";
+import {TreeNodeDataDefinition, TreeNodeDefinition} from "@/core/types/tree-definition";
 import CytoscapeComponent from 'react-cytoscapejs';
+import {useState} from "react";
 
 
 const styleSheet = [
@@ -122,31 +123,141 @@ function createTreeEdges(nodes: TreeNodeDefinition[]): TreeNodeDefinition[] {
 export function TreeInteractiveViewer() {
 
   cytoscape.use(cola);
+  cytoscape.use(dagre);
+
+
+  const [selectedNode, setSelectedNode] = useState<TreeNodeDataDefinition | null>(null);
+
 
   return (
-      <CytoscapeComponent
-          elements={treeData.nodes.concat(createTreeEdges(treeData.nodes))}
-          stylesheet={styleSheet as any}
-          layout={layout}
-          style={{ width: '100vw', height: '100vh' }}
-          zoomingEnabled={true}
-          maxZoom={6}
-          minZoom={0.3}
-          autounselectify={false}
-          boxSelectionEnabled={true}
-          cy={(cy) => {
-            console.log('EVT', cy);
-            cy.on('tap', 'node', (evt) => {
-              const node = evt.target;
-              console.log('EVT', evt);
-              console.log('TARGET', node.data());
-              console.log('TARGET TYPE', typeof node[0]);
-            });
-          }}
-      />
+      <div className="flex">
+
+        <CytoscapeComponent
+            elements={treeData.nodes.concat(createTreeEdges(treeData.nodes))}
+            stylesheet={styleSheet as any}
+            layout={layout}
+            style={{ width: '100vw', height: '100vh' }}
+            zoomingEnabled={true}
+            maxZoom={6}
+            minZoom={0.3}
+            autounselectify={false}
+            boxSelectionEnabled={true}
+            cy={(cy) => {
+
+              cy.on('tap', 'node', (evt) => {
+                const node = evt.target;
+                setSelectedNode(node.data());
+                cy.center(node);
+              });
+
+              cy.on('tap', (evt) => {
+                if (evt.target === cy) {
+                  setSelectedNode(null);
+                }
+              });
+
+            }}
+        />
+
+        <InformationDrawer
+            node={selectedNode}
+            setSelectedNode={setSelectedNode}
+        />
+
+      </div>
   );
 }
 
 
 
 
+export function InformationDrawer(props: { node: TreeNodeDataDefinition | null, setSelectedNode: (node: TreeNodeDataDefinition | null) => void }) {
+
+  const { node } = props;
+
+  console.log(node);
+
+  const findParentNode = (node: TreeNodeDataDefinition | null): TreeNodeDataDefinition | undefined => {
+    if (node && node.source) {
+      return treeData.nodes.map((n) => n.data).find((n) => n.id === node?.source) as TreeNodeDataDefinition | undefined;
+    }
+    return undefined;
+  }
+
+  return (
+      <div className="w-auto" >
+
+        <div id="drawer-info"
+             className={`
+                fixed top-20 z-40 p-4 h-5/6
+                ${node ? 'transform translate-x-0 left-5' : 'transform -translate-x-full left-0'}
+                overflow-y-auto transition-transform
+                border-neutral-800
+                border
+                backdrop-filter 
+                backdrop-blur-md
+                w-3/4
+                md:w-80
+                bg-gray-800
+                bg-opacity-10
+                rounded-xl
+               duration-200 ease-in-out`}
+             tabIndex={-1}
+             aria-labelledby="drawer-info-label"
+        >
+
+
+          <h5 id="drawer-label" className="inline-flex items-center mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400">
+            <svg className="w-5 h-5 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+            </svg>
+            Информация
+          </h5>
+
+
+          <button type="button"
+                  onClick={() => props.setSelectedNode(null)}
+                  data-drawer-hide="drawer-info"
+                  aria-controls="drawer-info"
+                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
+          >
+
+            <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+            </svg>
+            <span className="sr-only">Close menu</span>
+          </button>
+
+
+            <div className="mb-6">
+              <div className="mb-4">
+                <div className="block text-sm font-medium text-gray-500">Имя</div>
+                <div className="text-lg text-gray-300">{node?.label}</div>
+              </div>
+
+              <div className="mb-4">
+                <div className="block text-sm font-medium text-gray-500">Имя отца</div>
+                <div className="text-lg text-gray-300">
+                  { findParentNode(node)?.label || '-' }
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <div className="block text-sm font-medium text-gray-500">Родословная</div>
+                <div className="text-lg text-gray-300">Сары-Булак</div>
+              </div>
+
+              <div className="mb-4">
+                <div className="block text-sm font-medium text-gray-500">Подробнее</div>
+                <div className="text-lg text-gray-300">-</div>
+              </div>
+            </div>
+
+
+
+        </div>
+
+      </div>
+  );
+
+}

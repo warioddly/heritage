@@ -25,7 +25,7 @@ export function Header() {
     return (
         <header className="
             flex justify-between items-center w-full h-16 px-4 text-white fixed nav
-            border-neutral-800 border-b-2
+            border-neutral-800 border-b
             backdrop-filter backdrop-blur-md bg-black bg-opacity-30
             z-20
         ">
