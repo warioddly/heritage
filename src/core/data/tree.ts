@@ -539,7 +539,351 @@ export const treeData: TreeDefinition = {
                 source: '62',
             }
         },
+        {
+            data: {
+                id: '65',
+                label: 'Керим',
+                type: 'parent',
+                source: '64',
+            }
+        },
+        {
+            data: {
+                id: '66',
+                label: 'Алым',
+                type: 'parent',
+                source: '64',
+            }
+        },
+        {
+            data: {
+                id: '67',
+                label: 'Баатырбек',
+                type: 'parent',
+                source: '66',
+            }
+        },
+        {
+            data: {
+                id: '68',
+                label: 'Төлөбек',
+                type: 'parent',
+                source: '66',
+            }
+        },
+        {
+            data: {
+                id: '69',
+                label: 'Кылычбек',
+                type: 'parent',
+                source: '66',
+            }
+        },
+        {
+            data: {
+                id: '70',
+                label: 'Талгарбек',
+                type: 'parent',
+                source: '65',
+            }
+        },
+        {
+            data: {
+                id: '71',
+                label: 'Курманаалы',
+                type: 'parent',
+                source: '63',
+            }
+        },
+        {
+            data: {
+                id: '72',
+                label: 'Токтомуш',
+                type: 'parent',
+                source: '63',
+            }
+        },
+        {
+            data: {
+                id: '73',
+                label: 'Бейшебай',
+                type: 'parent',
+                source: '71',
+            }
+        },
+        {
+            data: {
+                id: '74',
+                label: 'Усуп',
+                type: 'parent',
+                source: '71',
+            }
+        },
+        {
+            data: {
+                id: '75',
+                label: 'Качкынбек',
+                type: 'parent',
+                source: '74',
+            }
+        },
+        {
+            data: {
+                id: '76',
+                label: 'Төлөбек',
+                type: 'parent',
+                source: '74',
+            }
+        },
+        {
+            data: {
+                id: '77',
+                label: 'Улан',
+                type: 'parent',
+                source: '76',
+            }
+        },
+        {
+            data: {
+                id: '78',
+                label: 'Сыймык',
+                type: 'parent',
+                source: '76',
+            }
+        },
+        {
+            data: {
+                id: '79',
+                label: 'Каптагай',
+                type: 'parent',
+                source: '73',
+            }
+        },
+        {
+            data: {
+                id: '80',
+                label: 'Эгемберди',
+                type: 'parent',
+                source: '79',
+            }
+        },
+        {
+            data: {
+                id: '81',
+                label: 'Эркинбек',
+                type: 'parent',
+                source: '79',
+            }
+        },
+        {
+            data: {
+                id: '82',
+                label: 'Эрлан',
+                type: 'parent',
+                source: '80',
+            }
+        },
+        {
+            data: {
+                id: '83',
+                label: 'Казыбай',
+                type: 'parent',
+                source: '72',
+            }
+        },
+        {
+            data: {
+                id: '84',
+                label: 'Султек',
+                type: 'parent',
+                source: '72',
+            }
+        },
+        {
+            data: {
+                id: '85',
+                label: 'Ысмайыл',
+                type: 'parent',
+                source: '72',
+            }
+        },
+        {
+            data: {
+                id: '86',
+                label: 'Турар',
+                type: 'parent',
+                source: '85',
+            }
+        },
+        {
+            data: {
+                id: '87',
+                label: 'Темирбек',
+                type: 'parent',
+                source: '85',
+            }
+        },
+        {
+            data: {
+                id: '88',
+                label: 'Жыргалбек',
+                type: 'parent',
+                source: '85',
+            }
+        },
+        {
+            data: {
+                id: '89',
+                label: 'Шайлообек',
+                type: 'parent',
+                source: '85',
+            }
+        },
+        {
+            data: {
+                id: '90',
+                label: 'Мазарбек',
+                type: 'parent',
+                source: '85',
+            }
+        },
+        {
+            data: {
+                id: '91',
+                label: 'Канатбек',
+                type: 'parent',
+                source: '84',
+            }
+        },
+        {
+            data: {
+                id: '92',
+                label: 'Болот',
+                type: 'parent',
+                source: '84',
+            }
+        },
+        {
+            data: {
+                id: '93',
+                label: 'Чолпонбай (Чокен)',
+                type: 'parent',
+                source: '83',
+            }
+        },
+        {
+            data: {
+                id: '94',
+                label: 'Табылды',
+                type: 'parent',
+                source: '83',
+            }
+        },
+        {
+            data: {
+                id: '95',
+                label: 'Таалайбек',
+                type: 'parent',
+                source: '83',
+            }
+        },
+        {
+            data: {
+                id: '96',
+                label: 'Алтынбек',
+                type: 'parent',
+                source: '95',
+            }
+        },
+        {
+            data: {
+                id: '97',
+                label: 'Тилек',
+                type: 'parent',
+                source: '95',
+            }
+        },
+        {
+            data: {
+                id: '98',
+                label: 'Элдар',
+                type: 'parent',
+                source: '95',
+            }
+        },
 
+        {
+            data: {
+                id: '99',
+                label: 'Каныбек',
+                type: 'parent',
+                source: '93',
+            }
+        },
+        {
+            data: {
+                id: '100',
+                label: 'Талантбек',
+                type: 'parent',
+                source: '93',
+            }
+        },
+        {
+            data: {
+                id: '101',
+                label: 'Сапарбек',
+                type: 'parent',
+                source: '93',
+            }
+        },
+        {
+            data: {
+                id: '102',
+                label: 'Нурбек',
+                type: 'parent',
+                source: '93',
+            }
+        },
+        {
+            data: {
+                id: '103',
+                label: 'Айбек',
+                type: 'parent',
+                source: '93',
+            }
+        },
+        {
+            data: {
+                id: '104',
+                label: 'Өмүрбек',
+                type: 'parent',
+                source: '93',
+            }
+        },
+        {
+            data: {
+                id: '105',
+                label: 'Атамбай',
+                type: 'parent',
+                source: '60',
+            }
+        },
+        {
+            data: {
+                id: '106',
+                label: 'Айбаш',
+                type: 'parent',
+                source: '60',
+            }
+        },
+        {
+            data: {
+                id: '107',
+                label: 'Дөөлөт',
+                type: 'parent',
+                source: '60',
+            }
+        },
     ],
     edges: [],
 };
