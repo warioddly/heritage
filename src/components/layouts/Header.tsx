@@ -44,10 +44,10 @@ export function Header() {
 
             <ul className="flex">
                 {links.map(( link, index) => (
-                    <li className="flex" key={`item-${link.id}`}>
+                    <li className="flex text-sm md:text-base" key={`item-${link.id}`}>
                         <div
                             key={link.id}
-                            className={`nav-links px-2 cursor-pointer capitalize font-medium link-underline ${
+                            className={`nav-links px-2 cursor-pointer capitalize font-normal link-underline ${
                                 pathname === link.link ? "text-blue-700" : "text-gray-400 hover:text-white transition-colors duration-300"
                             }`}
                         >

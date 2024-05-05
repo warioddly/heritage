@@ -1,5 +1,5 @@
 "use client";
-import {TreeInteractiveViewer} from "@/components/tree/InteractiveViewer";
+import {TreeInteractiveViewer} from "@/components/tree/TreeInteractiveViewer";
 import {TreeViewToolbar} from "@/components/tree/TreeViewToolbar";
 
 
