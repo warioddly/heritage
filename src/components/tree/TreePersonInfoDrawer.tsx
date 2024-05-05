@@ -34,7 +34,8 @@ export function TreePersonInfoDrawer(props: { node: TreeNodeDataDefinition | nul
                 backdrop-blur-md
                 bg-gray-800
                 bg-opacity-10
-                rounded-xl
+                rounded-t-xl
+                md:rounded-xl
                 transition-transform
                 duration-200 
                 ease-in-out`}
@@ -122,7 +123,7 @@ function DrawerContent({ node, handleClose }: { node: TreeNodeDataDefinition | n
               <p
                  key={index}
                  className="hover:bg-blue-800 text-gray-200
-                  text-sm font-semibold px-2.5 py-0.5 rounded
+                  text-sm px-2.5 py-0.5 rounded
                   cursor-pointer
                   border border-neutral-500 inline-flex items-center justify-center"
               >{n.label}</p>

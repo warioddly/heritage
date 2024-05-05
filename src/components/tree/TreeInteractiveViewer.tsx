@@ -117,7 +117,7 @@ export function TreeInteractiveViewer() {
             style={{ width: '100vw', height: '100vh' }}
             zoomingEnabled={true}
             maxZoom={6}
-            minZoom={0.3}
+            minZoom={0.2}
             autounselectify={false}
             boxSelectionEnabled={true}
             cy={(cy) => {
