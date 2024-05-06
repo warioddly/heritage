@@ -38,7 +38,7 @@ export function Header() {
                         href="/"
                         rel="noreferrer"
                     >
-                        <Image src="/logo-rounded.jpg" alt="logo" width={35} height={35} />
+                        <Image src="/images/logo/logo-rounded.jpg" alt="logo" width={35} height={35} />
                         <span className="ml-2 hidden md:block">Heritage</span>
                     </a>
                 </h1>

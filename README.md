@@ -2,7 +2,7 @@
 
 This is a project that shows the family tree of the [Kyrgyz](https://ru.wikipedia.org/wiki/%D0%9A%D0%B8%D1%80%D0%B3%D0%B8%D0%B7%D1%8B) people. And you can see yourself and search for yourself (if you are Kyrgyz, of course) in the tree.
 
-![logo.jpg](public/logo.jpg)
+![logo.jpg](public/images/logo/logo.jpg)
 
 ## How to contribute
 
