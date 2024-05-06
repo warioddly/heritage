@@ -19,7 +19,7 @@ const styleSheet = [
       backgroundColor: '#1d4ed8',
       width: 30,
       height: 30,
-      label: 'data(label)',
+      label: 'data(name)',
       'z-index': '10',
       color: 'white',
       fontSize: 20,

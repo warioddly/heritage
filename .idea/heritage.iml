@@ -5,9 +5,9 @@
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
-      <excludeFolder url="file://$MODULE_DIR$/sanjyra-parser/.dart_tool" />
-      <excludeFolder url="file://$MODULE_DIR$/sanjyra-parser/.pub" />
-      <excludeFolder url="file://$MODULE_DIR$/sanjyra-parser/build" />
+      <excludeFolder url="file://$MODULE_DIR$/parser/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/parser/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/parser/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

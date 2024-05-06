@@ -1,5 +1,5 @@
-name: sanjyra_parser
-description: A sample command-line application.
+name: parser
+description: A web scrapy application
 version: 1.0.0
 # repository: https://github.com/my_org/my_repo
 
@@ -9,6 +9,9 @@ environment:
 # Add regular dependencies here.
 dependencies:
   # path: ^1.8.0
+  html: ^0.15.4
+  http: ^1.2.0
+  path_provider: ^2.1.3
 
 dev_dependencies:
   lints: ^2.1.0
