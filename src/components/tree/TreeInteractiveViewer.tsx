@@ -116,7 +116,7 @@ export function TreeInteractiveViewer() {
             layout={layout}
             style={{ width: '100vw', height: '100vh' }}
             zoomingEnabled={true}
-            maxZoom={6}
+            maxZoom={1}
             minZoom={0.2}
             autounselectify={false}
             boxSelectionEnabled={true}
