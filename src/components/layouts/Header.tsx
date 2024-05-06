@@ -1,5 +1,6 @@
 "use client";
 import { usePathname } from 'next/navigation';
+import Image from "next/image";
 
 export function Header() {
 
@@ -33,11 +34,12 @@ export function Header() {
             <div>
                 <h1 className="text-xl font-signature">
                     <a
-                        className="link-underline link-underline-black"
+                        className="link-underline link-underline-black flex items-center"
                         href="/"
                         rel="noreferrer"
                     >
-                        Heritage
+                        <Image src="/logo-rounded.jpg" alt="logo" width={35} height={35} />
+                        <span className="ml-2 hidden md:block">Heritage</span>
                     </a>
                 </h1>
             </div>

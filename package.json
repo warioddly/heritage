@@ -1,5 +1,6 @@
 {
   "name": "heritage",
+  "description": "This is a project that shows the family tree of the Kyrgyz people.",
   "version": "0.1.0",
   "private": true,
   "scripts": {

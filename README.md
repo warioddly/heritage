@@ -1,7 +1,37 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## HERITAGE
 
-## Getting Started
+This is a project that shows the family tree of the [Kyrgyz](https://ru.wikipedia.org/wiki/%D0%9A%D0%B8%D1%80%D0%B3%D0%B8%D0%B7%D1%8B) people. And you can see yourself and search for yourself (if you are Kyrgyz, of course) in the tree.
 
+![logo.jpg](public/logo.jpg)
+
+## How to contribute
+
+If you want to contribute to the project, you can do the following:
+
+- Add yourself and your fathers
+- Fix some bugs on the site
+- To give ideas for improving the site
+- Report any wrong paths in the family tree
+- Etc.
+
+The best way to contribute is to fork the project and make a pull request. If you have any questions, you can write to me on [Telegram](https://t.me/warioddly).
+
+
+## What You must know before contributing
+
+The project is written in Next.js and if you want to contribute, you must know the following:
+
+- History of the Kyrgyz people
+- The family tree of your family if you add yourself
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Learn React](https://reactjs.org/tutorial/tutorial.html) - an interactive React tutorial.
+- [Learn TypeScript](https://www.typescriptlang.org/docs/handbook/intro.html) - an interactive TypeScript tutorial.
+- [Learn Tailwind CSS](https://tailwindcss.com/docs) - an interactive Tailwind CSS tutorial.
+
+And it is not necessary to know the technology above, you can write your ideas, etc. (read the section [How to contribute](#how-to-contribute)).
+
+
+## How to run the project
 First, run the development server:
 
 ```bash
@@ -16,21 +46,4 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Wish you a good contribution! 🚀
