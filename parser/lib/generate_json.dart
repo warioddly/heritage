@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 class JsonFileGenerator {
@@ -14,17 +13,17 @@ class JsonFileGenerator {
   static final currentDirectory = Directory.current.path;
   static final outputDirectory = Directory('$currentDirectory/output');
 
-  void generateJson(List<Map<String, dynamic>> data, [String filename = 'data.json']) async  {
+  void generateJson(dynamic data, [String filename = 'data.json', FileMode mode = FileMode.write]) async  {
 
     final file = File('${outputDirectory.path}/$filename');
 
-    file.writeAsStringSync(json.encode(data));
+    file.writeAsStringSync(data, mode: mode);
 
     if (file.existsSync()) {
-      print('\n[+] $filename file created successfully.');
+      print('[+] $filename ${mode == FileMode.write ? 'created' : 'updated'} successfully.');
     }
     else {
-      print('\n[+] Error creating data.json file.');
+      print('[+] Error ${mode == FileMode.write ? 'creating' : 'updating'} $filename file.');
     }
 
   }

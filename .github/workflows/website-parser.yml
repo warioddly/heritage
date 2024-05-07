@@ -1,0 +1,40 @@
+name: Website Parser
+
+on:
+  push:
+    branches:
+      - main
+
+permissions: write-all
+
+jobs:
+  build-and-archive:
+    name: Parse and Push
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      USERNAME: github-ci[bot]
+      EMAIL: github-actions[bot]@users.noreply.github.com
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.16.5"
+          channel: 'stable'
+          cache: true
+
+      - name: Config path and Generate appcast
+        run: |
+          dart ./parser/bin/parser.dart
+
+      - name: Push to project_archives
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ env.GITHUB_TOKEN }}
+          user_name: '${{ env.USERNAME }}'
+          user_email: '${{ env.EMAIL }}'
+          publish_dir: ${{ github.workspace }}/parser/output/
+          publish_branch: project_archives
+          keep_files: true
+          force_orphan: false
+

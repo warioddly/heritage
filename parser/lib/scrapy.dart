@@ -1,12 +1,17 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
 import 'package:html/dom.dart';
+import 'package:parser/generate_json.dart';
 
 class Scrapy {
 
   final Set<String> _visited = <String>{};
   final List<People> people = <People>[];
   int _counter = 1;
+  final JsonFileGenerator jsonFileGenerator = JsonFileGenerator();
 
   Future<void> parse(String parent, String url) async {
 
@@ -23,6 +28,13 @@ class Scrapy {
     final document = parser.parse(response.body);
     List<String> children = _getChildren(document);
 
+    final person = _getPeople(parent, url, document);
+
+    people.add(person);
+
+    jsonFileGenerator.generateJson('${jsonEncode(person.toJson())},', 'dynamic_all_data.json', FileMode.append);
+    jsonFileGenerator.generateJson('${jsonEncode(person.toSiteJson())},', 'dynamic_all_data_site.json', FileMode.append);
+
     if (children.isNotEmpty) {
       final id = _getId(url);
 
@@ -32,7 +44,6 @@ class Scrapy {
 
     }
 
-    people.add(_getPeople(parent, url, document));
 
   }
 

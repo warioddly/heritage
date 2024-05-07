@@ -1,7 +1,7 @@
 name: parser
 description: A web scrapy application
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/warioddly/heritage
 
 environment:
   sdk: ^3.2.3

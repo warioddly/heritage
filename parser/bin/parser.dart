@@ -1,5 +1,5 @@
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:parser/generate_json.dart';
 import 'package:parser/scrapy.dart';
 
@@ -35,8 +35,9 @@ void writeToFile(List<People> people) {
     _peopleToSite.add(person.toSiteJson());
   }
 
+
   JsonFileGenerator()
-    ..generateJson(_people)
-    ..generateJson(_peopleToSite, 'dataSite.json');
+    ..generateJson(jsonEncode(_people), 'all_data.json')
+    ..generateJson(jsonEncode(_peopleToSite), 'all_data_site.json');
 
 }
