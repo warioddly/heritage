@@ -52,15 +52,18 @@ export function createTreeEdges(nodes: TreeNodeDefinition[]): TreeNodeDefinition
 
     nodes.forEach((node: TreeNodeDefinition) => {
 
-        if (node.data) {
-
-            if (node.data.id === '1') {
-                return;
-            }
-
-            edges.push(createTreeEdge(node.data.id, node.data.source));
-
+        if (!node.data || node.data.id === '1') {
+            return;
         }
+
+        edges.push({
+            data: {
+                id: `${node.data.source}-${node.data.id}`,
+                source: node.data.source,
+                target: node.data.id,
+            }
+        });
+
     });
 
     return edges;
