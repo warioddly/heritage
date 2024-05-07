@@ -25,6 +25,8 @@ jobs:
 
       - name: Config path and Generate appcast
         run: |
+          cd ./parser
+          dart pub get
           dart ./parser/bin/parser.dart
 
       - name: Push to project_archives
@@ -37,4 +39,3 @@ jobs:
           publish_branch: project_archives
           keep_files: true
           force_orphan: false
-
