@@ -21,7 +21,7 @@ function SearchField() {
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
-        setFilteredData(treeData.nodes.map(n => n.data).filter(node => node.label.toLowerCase().includes(e.target.value.toLowerCase())) || []);
+        setFilteredData(treeData.nodes.map(n => n.data).filter(node => (node.fullname || "").toLowerCase().includes((e.target.value || "").toLowerCase())) || []);
     }
 
     return (
@@ -60,7 +60,7 @@ function SearchField() {
                             {
                                 filteredData.map((node, index) => (
                                     <li key={index} className="text-white text-sm p-2 hover:bg-blue-800 cursor-pointer rounded-md">
-                                        {node.label}
+                                        {node.name}
                                     </li>
                                 ))
                             }

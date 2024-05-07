@@ -5,11 +5,11 @@ import cola from 'cytoscape-cola';
 import dagre from 'cytoscape-dagre';
 import cytoscape from "cytoscape";
 import {treeData} from "@/core/data/tree";
-import {TreeNodeDataDefinition} from "@/core/types/tree-definition";
+import {TreeNodeDataDefinition, TreeNodeDefinition} from "@/core/types/tree-definition";
 import CytoscapeComponent from 'react-cytoscapejs';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {TreePersonInfoDrawer} from "@/components/tree/TreePersonInfoDrawer";
-import {createTreeEdges} from "@/core/utils/tree-utils";
+import Preloader from "@/components/other/Preloader";
 
 
 const styleSheet = [
@@ -78,41 +78,66 @@ export function TreeInteractiveViewer() {
   cytoscape.use(dagre);
 
   const [selectedNode, setSelectedNode] = useState<TreeNodeDataDefinition | null>(null);
+  const [graph, setGraph] = useState<TreeNodeDefinition[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+
+        const worker = new Worker(new URL('../../core/workers/tree-worker.ts', import.meta.url));
+
+        worker.postMessage({ type: 'GET_TREE', payload: treeData });
+
+        worker.onmessage = (e: MessageEvent<WorkerBridge>) => {
+          setGraph(e.data.payload);
+          worker.terminate();
+        };
+
+        return () => {
+            worker.terminate();
+        }
+
+    }, []);
 
   return (
       <div className="flex">
 
-        <CytoscapeComponent
-            elements={treeData.nodes.concat(createTreeEdges(treeData.nodes))}
-            stylesheet={styleSheet as any}
-            style={{ width: '100vw', height: '100vh' }}
-            zoomingEnabled={true}
-            layout={layout}
-            maxZoom={1}
-            minZoom={0.1}
-            autounselectify={false}
-            boxSelectionEnabled={true}
-            cy={(cy) => {
+          {!loading && (
+              <CytoscapeComponent
+                  elements={graph}
+                  stylesheet={styleSheet as any}
+                  style={{ width: '100vw', height: '100vh' }}
+                  zoomingEnabled={true}
+                  layout={layout}
+                  maxZoom={1}
+                  minZoom={0.1}
+                  autounselectify={false}
+                  boxSelectionEnabled={false}
+                  cy={(cy) => {
 
-              cy.on('tap', 'node', (evt) => {
-                const node = evt.target;
-                setSelectedNode(node.data());
-                cy.center(node);
-              });
+                      setLoading(false);
 
-              cy.on('tap', (evt) => {
-                if (evt.target === cy) {
-                  setSelectedNode(null);
-                }
-              });
+                      cy.on('tap', 'node', (evt) => {
+                          const node = evt.target;
+                          setSelectedNode(node.data());
+                          cy.center(node);
+                      });
 
-            }}
-        />
+                      cy.on('tap', (evt) => {
+                          if (evt.target === cy) {
+                              setSelectedNode(null);
+                          }
+                      });
+
+                  }}
+              />)
+          }
 
         <TreePersonInfoDrawer
             node={selectedNode}
             setSelectedNode={setSelectedNode}
         />
+
+        {loading && <Preloader />}
 
       </div>
   );

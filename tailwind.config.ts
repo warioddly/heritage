@@ -20,8 +20,12 @@ const config: Config = {
     plugin(function ({ addUtilities }) {
         addUtilities({
             ".backdrop-blur-md": {
-            "-webkit-backdrop-filter": "blur(15px)",
-            "backdrop-filter": "blur(15px)",
+                "-webkit-backdrop-filter": "blur(15px)",
+                "backdrop-filter": "blur(15px)",
+            },
+            ".backdrop-blur-sm": {
+                "-webkit-backdrop-filter": "blur(8px)",
+                "backdrop-filter": "blur(8px)",
             },
         });
     })

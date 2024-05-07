@@ -1,7 +1,7 @@
 import Image from "next/image";
 import {Baffler} from "@/components/other/Baffler";
 
-export default function Home() {
+export default function About() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
         <div className="relative h-screen flex flex-col items-center justify-center">
@@ -15,17 +15,17 @@ export default function Home() {
                 <div className="flex mt-9 justify-center gap-2">
                     <a
                         href="/tree"
-                        className="bg-blue-800 text-neutral-200 py-2 px-4 rounded border border-blue-600 hover:bg-blue-900 hover:border-blue-700 hover:text-neutral-300">
+                        className="bg-blue-700 text-neutral-200 py-2 px-4 rounded border border-neutral-600 hover:bg-blue-800">
                         Get Started
                     </a>
+
                     <a
                         href="/about"
-                        className="hover:bg-blue-900 text-neutral-200 font-bold py-2 px-4 rounded border border-neutral-600 backdrop-filter backdrop-blur-sm bg-black bg-opacity-30 hover:border-blue-700">
+                        className="hover:bg-blue-800 text-neutral-200 font-bold py-2 px-4 rounded border border-neutral-600 backdrop-filter backdrop-blur-sm bg-black bg-opacity-30">
                         Learn More
                     </a>
                 </div>
             </div>
-            
         </div>
     </main>
   );
