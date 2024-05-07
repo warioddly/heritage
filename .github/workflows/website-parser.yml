@@ -27,7 +27,7 @@ jobs:
         run: |
           cd ./parser
           dart pub get
-          dart ./parser/bin/parser.dart
+          dart ./bin/parser.dart
 
       - name: Push to project_archives
         uses: peaceiris/actions-gh-pages@v3
