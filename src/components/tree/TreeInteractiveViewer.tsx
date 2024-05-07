@@ -22,7 +22,7 @@ const styleSheet = [
       label: 'data(name)',
       'z-index': '10',
       color: 'white',
-      fontSize: 20,
+      fontSize: 16,
     },
   },
   {
@@ -102,7 +102,7 @@ const layout = {
 
 export function TreeInteractiveViewer() {
 
-  cytoscape.use(cola);
+  // cytoscape.use(cola);
   cytoscape.use(dagre);
 
   const [selectedNode, setSelectedNode] = useState<TreeNodeDataDefinition | null>(null);
