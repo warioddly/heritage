@@ -90,6 +90,7 @@ export function TreeInteractiveViewer() {
         worker.onmessage = (e: MessageEvent<WorkerBridge>) => {
           setGraph(e.data.payload);
           worker.terminate();
+          setLoading(false);
         };
 
         return () => {
@@ -114,8 +115,6 @@ export function TreeInteractiveViewer() {
                   boxSelectionEnabled={false}
                   cy={(cy) => {
 
-                      setLoading(false);
-
                       cy.on('tap', 'node', (evt) => {
                           const node = evt.target;
                           setSelectedNode(node.data());
@@ -129,8 +128,8 @@ export function TreeInteractiveViewer() {
                       });
 
                   }}
-              />)
-          }
+              />
+          )}
 
         <TreePersonInfoDrawer
             node={selectedNode}
