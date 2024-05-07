@@ -22,7 +22,7 @@ const styleSheet = [
       label: 'data(name)',
       'z-index': '10',
       color: 'white',
-      fontSize: 16,
+      fontSize: 12,
     },
   },
   {
@@ -50,7 +50,7 @@ const styleSheet = [
       width: 2,
       "line-color": "#2a3e79",
       'target-arrow-color': '#2a3e79',
-        'target-arrow-shape': 'triangle',
+      'target-arrow-shape': 'triangle',
       'curve-style': 'bezier',
     },
   },
@@ -62,18 +62,13 @@ const layout = {
   infinite: false,
   animate: false,
   directed: false,
-  animationDuration: 1000,
   avoidOverlap: true,
-  refresh: 1, // number of ticks per frame; higher is faster but more jerky
-  maxSimulationTime: 4000, // max length in ms to run the layout
-  ungrabifyWhileSimulating: false, // so you can't drag nodes during layout
   fit: false,
   padding: 30,
-  boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
-  nodeDimensionsIncludeLabels: false, // whether labels should be included in determining the space used by a node
-  randomize: false, // use random node positions at beginning of layout
-  handleDisconnected: true, // if true, avoids disconnected components from overlapping
-  convergenceThreshold: 0.01, // when the alpha value (system energy) falls below this value, the layout stops
+  nodeDimensionsIncludeLabels: false,
+  randomize: false,
+  handleDisconnected: false,
+  convergenceThreshold: 0.01,
 };
 
 
@@ -94,7 +89,7 @@ export function TreeInteractiveViewer() {
             zoomingEnabled={true}
             layout={layout}
             maxZoom={1}
-            minZoom={0.2}
+            minZoom={0.1}
             autounselectify={false}
             boxSelectionEnabled={true}
             cy={(cy) => {

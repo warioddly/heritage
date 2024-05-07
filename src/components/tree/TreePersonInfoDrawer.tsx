@@ -95,13 +95,13 @@ function DrawerContent({ node, handleClose }: { node: TreeNodeDataDefinition | n
     <div className="mb-6">
       <div className="mb-4">
         <div className="block text-sm font-normal text-gray-500">Имя</div>
-        <div className="text-sm md:text-base text-gray-300">{node?.label}</div>
+        <div className="text-sm md:text-base text-gray-300">{node?.name}</div>
       </div>
 
       <div className="mb-4">
         <div className="block text-sm font-normal text-gray-500">Имя отца</div>
         <div className="text-sm md:text-base text-gray-300">
-          { findParentNode(node)?.data.label || '-' }
+          { findParentNode(node)?.data.name || '-' }
         </div>
       </div>
 
@@ -126,7 +126,7 @@ function DrawerContent({ node, handleClose }: { node: TreeNodeDataDefinition | n
                   text-sm px-2.5 py-0.5 rounded
                   cursor-pointer
                   border border-neutral-500 inline-flex items-center justify-center"
-              >{n.label}</p>
+              >{n.name}</p>
             ))}
         </div>
       </div>
