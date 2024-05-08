@@ -1,19 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
 import 'package:html/dom.dart';
-import 'package:parser/generate_json.dart';
+import 'package:parser/bundler.dart';
+import 'package:parser/people_model.dart';
 
 class Scrapy {
 
-  final Set<String> _visited = <String>{};
-  final List<People> people = <People>[];
-  int _counter = 1;
-  final JsonFileGenerator jsonFileGenerator = JsonFileGenerator();
+  final _visited = <String>{};
+  final people = <People>[];
+  final bundler = Bundler();
 
-  Future<void> parse(String parent, String url) async {
+  Future<void> parse(List<String> args) async {
+
+    final parent = args[0];
+    final url = args[1];
 
     if (!_crawl(url)) {
       return;
@@ -32,14 +34,13 @@ class Scrapy {
 
     people.add(person);
 
-    jsonFileGenerator.generateJson('${jsonEncode(person.toJson())},', 'dynamic_all_data.json', FileMode.append);
-    jsonFileGenerator.generateJson('${jsonEncode(person.toSiteJson())},', 'dynamic_all_data_site.json', FileMode.append);
+    bundler.generate('${jsonEncode(person.toJson())},', 'dynamic_all_data.json', FileMode.append);
 
     if (children.isNotEmpty) {
       final id = _getId(url);
 
       for (int i = 0; i < children.length; i++) {
-        await parse(id, children[i]);
+        await parse([id, children[i]]);
       }
 
     }
@@ -87,7 +88,7 @@ class Scrapy {
       return false;
     }
     _visited.add(url);
-    print('[${++_counter}] Crawling $url');
+    print('[+] Crawling $url');
     return true;
   }
 
@@ -114,47 +115,6 @@ class Scrapy {
       return '';
     }
     return url.split('/').last;
-  }
-
-}
-
-class People {
-
-  People({
-    required this.id,
-    required this.parent,
-    required this.name,
-    required this.fullName,
-    required this.url,
-    this.children = const [],
-    this.bio,
-  });
-
-  final String id;
-  final String parent;
-  final String name;
-  final String fullName;
-  final String? bio;
-  final String url;
-  final List<People> children;
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'source': parent,
-      'name': name,
-      'fullName': fullName,
-      'bio': bio,
-      'url': url,
-      'children': children.map((e) => e.toJson()).toList(),
-    };
-  }
-
-
-  Map<String, dynamic> toSiteJson() {
-    return {
-      "data": toJson(),
-    };
   }
 
 }

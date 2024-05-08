@@ -1,43 +1,88 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:parser/generate_json.dart';
+import 'dart:isolate';
+import 'package:parser/bundler.dart';
+import 'package:parser/formatter.dart';
+import 'package:parser/people_model.dart';
 import 'package:parser/scrapy.dart';
 
 
 void main(List<String> arguments) async {
 
-  final scrapy = Scrapy();
+  if (arguments.isEmpty) {
+    print('Usage: parser <command>');
+    return;
+  }
 
-  // catch CTRL+C signal
-  ProcessSignal.sigint.watch().listen((event) {
-    writeToFile(scrapy.people);
-    print('\n[+] Exiting...');
-    exit(0);
-  });
+  if (arguments[0] == 'help') {
+    print('Usage: parser <command>');
+    print('Commands:');
+    print('  scrapy: Scrapes the website and generates the data.');
+    print('  format <path>: Formats the data from the given path.');
+    print('  all <path>: Scrapes the website and formats the data from the given path.');
+    return;
+  }
 
-  print('[+] Sanjyra Parser');
-
-  await scrapy.parse('', 'https://www.sanjyra.net/man/1');
-
-  print('\n[+] Done! Parsed ${scrapy.people.length} people.');
-
-  writeToFile(scrapy.people);
+  switch (arguments[0]) {
+    case 'scrapy':
+      await _scrapy();
+      break;
+    case 'format':
+      if (arguments.length < 2) {
+        print('Usage: parser format <path>');
+        return;
+      }
+      _formatter(arguments[1]);
+      break;
+    case 'all':
+      if (arguments.length < 2) {
+        print('Usage: parser format <path>');
+        return;
+      }
+      await _scrapy();
+      _formatter(arguments[1]);
+      break;
+    default:
+      print('Invalid command.');
+  }
 
 }
 
-void writeToFile(List<People> people) {
 
-  final List<Map<String, dynamic>> _people = [];
-  final List<Map<String, dynamic>> _peopleToSite = [];
+Future<void> _scrapy() async {
+  print('[+] Scrapy started.');
 
-  for (final person in people) {
-    _people.add(person.toJson());
-    _peopleToSite.add(person.toSiteJson());
-  }
+  final scrapy = Scrapy();
+
+  await scrapy.parse(['', 'https://www.sanjyra.net/man/1']);
+
+  print('\n[+] Done! Parsed ${scrapy.people.length} people.');
+
+  Bundler()
+    ..generate(jsonEncode(scrapy.people.map((e) => e.toJson())), 'all_data.json')
+    ..generate(jsonEncode(scrapy.people.map((e) => e.toCytoscapeJson())), 'all_data_site.json');
+
+  print('[+] Scrapy finished.');
+}
 
 
-  JsonFileGenerator()
-    ..generateJson(jsonEncode(_people), 'all_data.json')
-    ..generateJson(jsonEncode(_peopleToSite), 'all_data_site.json');
+void _formatter(String path) {
+
+  print('[+] Formatter started.');
+
+  final bundler = Bundler();
+  final formatter = Formatter();
+
+  final data = jsonDecode(File(path).readAsStringSync());
+
+  final normalData = formatter.fromCytoscapeToNormal(data);
+  final cytoscapeData = formatter.fromNormalToCytoscape(normalData);
+
+  bundler
+    ..generate(jsonEncode(normalData), 'data_normal.json')
+    ..generate(jsonEncode(cytoscapeData), 'data_cytoscape.json');
+
+  print('[+] Formatter finished.');
 
 }
