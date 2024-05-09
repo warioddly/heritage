@@ -9,13 +9,8 @@ onmessage = function (e: MessageEvent<WorkerBridge>) {
 
     switch (type) {
         case 'GET_TREE':
-
-            let data: TreeNodeDataDefinition[] = [];
-
-            const edges = createTreeEdges(payload.nodes);
-
-            data = payload.nodes.concat(edges);
-
+            const edges = createTreeEdges(payload);
+            let data: TreeNodeDataDefinition[] = payload.concat(edges);
             postMessage({ type , payload: data });
             break;
         default:

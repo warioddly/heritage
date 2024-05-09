@@ -1,13 +1,12 @@
 "use client";
-import {treeData} from "@/core/data/tree";
-import {TreeNodeDataDefinition, TreeNodeDefinition} from "@/core/types/tree-definition";
-import {binaryTreeSearch, searchChildNodes} from "@/core/utils/tree-utils";
+import {TreeNodeDefinition} from "@/core/types/tree-definition";
 import {useEffect, useState} from "react";
+import {useTreeStore} from "@/core/stores/tree";
 
 
-export function TreePersonInfoDrawer(props: { node: TreeNodeDataDefinition | null, setSelectedNode: (node: TreeNodeDataDefinition | null) => void }) {
+export function TreePersonInfoDrawer() {
 
-  const { node, setSelectedNode } = props;
+  const treeStore = useTreeStore();
 
   return (
       <div className="w-auto" >
@@ -19,7 +18,7 @@ export function TreePersonInfoDrawer(props: { node: TreeNodeDataDefinition | nul
                 bottom-0 
                 left-0
                 top-auto
-                ${node 
+                ${treeStore.selected 
                  ? 'transform translate-y-0 md:translate-x-0 md:left-5' 
                  : 'transform translate-y-full md:-translate-x-full md:left-0'
                 }
@@ -42,7 +41,9 @@ export function TreePersonInfoDrawer(props: { node: TreeNodeDataDefinition | nul
              tabIndex={-1}
              aria-labelledby="drawer-info-label"
         >
-          <DrawerContent node={node} handleClose={() => setSelectedNode(null)} />
+          <DrawerContent handleClose={() => {
+            treeStore.setSelected(null);
+          }}/>
         </div>
       </div>
   );
@@ -50,24 +51,30 @@ export function TreePersonInfoDrawer(props: { node: TreeNodeDataDefinition | nul
 }
 
 
-function DrawerContent({ node, handleClose }: { node: TreeNodeDataDefinition | null, handleClose: () => void }) {
+function DrawerContent({ handleClose }: {  handleClose: () => void }) {
 
-  const [childrenNodes, setChildrenNodes] = useState<TreeNodeDataDefinition[]>([]);
-
-  const findParentNode = (node: TreeNodeDataDefinition | null): TreeNodeDefinition | undefined => {
-    return binaryTreeSearch(treeData.nodes, node?.source);
-  }
+  const [childrenNodes, setChildrenNodes] = useState<TreeNodeDefinition[]>([]);
+  const treeStore = useTreeStore();
 
   useEffect(() => {
 
-    if (node) {
-      setChildrenNodes(searchChildNodes(treeData.nodes, node.id) || []);
+    if (!treeStore.selected) {
+      return;
     }
+
+    fetch('/api/get-node-children', {
+        method: 'POST',
+        body: JSON.stringify({id: treeStore.selected?.id}),
+    })
+        .then(response => response.json())
+        .then((data: TreeNodeDefinition[]) => setChildrenNodes(data || []))
+        .catch(error => console.error('Error:', error));
 
     return () => {
         setChildrenNodes([]);
     }
-  }, [node]);
+  }, [treeStore.selected]);
+
 
   return <>
 
@@ -95,13 +102,13 @@ function DrawerContent({ node, handleClose }: { node: TreeNodeDataDefinition | n
     <div className="mb-6">
       <div className="mb-4">
         <div className="block text-sm font-normal text-gray-500">Имя</div>
-        <div className="text-sm md:text-base text-gray-300">{node?.name}</div>
+        <div className="text-sm md:text-base text-gray-300">{treeStore.selected?.name}</div>
       </div>
 
       <div className="mb-4">
         <div className="block text-sm font-normal text-gray-500">Имя отца</div>
         <div className="text-sm md:text-base text-gray-300">
-          { findParentNode(node)?.data.name || '-' }
+          { treeStore.selected?.fullName || '-' }
         </div>
       </div>
 
@@ -119,14 +126,14 @@ function DrawerContent({ node, handleClose }: { node: TreeNodeDataDefinition | n
         <div className="block text-sm font-normal text-gray-500 mb-1">Дети</div>
         <div className="text-gray-300 flex flex-wrap gap-1.5">
           {childrenNodes.length === 0 && <div className="text-sm md:text-base text-gray-300">-</div>}
-          {childrenNodes?.map((n, index) => (
+          {childrenNodes && childrenNodes.map((n, index) => (
               <p
                  key={index}
                  className="hover:bg-blue-800 text-gray-200
                   text-sm px-2.5 py-0.5 rounded
                   cursor-pointer
                   border border-neutral-500 inline-flex items-center justify-center"
-              >{n.name}</p>
+              >{n.data.name}</p>
             ))}
         </div>
       </div>

@@ -1,5 +1,4 @@
 import {TreeNodeDataDefinition, TreeNodeDefinition} from "@/core/types/tree-definition";
-import {createTreeEdge} from "@/core/utils/utils";
 
 
 export function binaryTreeSearch(tree: TreeNodeDefinition[], id?: string): TreeNodeDefinition | undefined {
@@ -66,5 +65,5 @@ export function createTreeEdges(nodes: TreeNodeDefinition[]): TreeNodeDefinition
 
     });
 
-    return edges;
+    return nodes.concat(edges);
 }

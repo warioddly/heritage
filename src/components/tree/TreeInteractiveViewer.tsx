@@ -4,13 +4,13 @@ import cola from 'cytoscape-cola';
 // @ts-ignore
 import dagre from 'cytoscape-dagre';
 import cytoscape from "cytoscape";
-import {treeData} from "@/core/data/tree";
 import {TreeNodeDataDefinition, TreeNodeDefinition} from "@/core/types/tree-definition";
 import CytoscapeComponent from 'react-cytoscapejs';
 import {useEffect, useState} from "react";
 import {TreePersonInfoDrawer} from "@/components/tree/TreePersonInfoDrawer";
 import Preloader from "@/components/other/Preloader";
-
+import {cytoscapeLayouts, ECytoscapeLayouts} from "@/core/data/cytoscape-layouts";
+import {useTreeStore} from "@/core/stores/tree";
 
 const styleSheet = [
   {
@@ -57,47 +57,56 @@ const styleSheet = [
 ];
 
 
-const layout = {
-  name: 'dagre',
-  infinite: false,
-  animate: false,
-  directed: false,
-  avoidOverlap: true,
-  fit: false,
-  padding: 30,
-  nodeDimensionsIncludeLabels: false,
-  randomize: false,
-  handleDisconnected: false,
-  convergenceThreshold: 0.01,
-};
-
-
 export function TreeInteractiveViewer() {
 
-  // cytoscape.use(cola);
+  cytoscape.use(cola);
   cytoscape.use(dagre);
 
-  const [selectedNode, setSelectedNode] = useState<TreeNodeDataDefinition | null>(null);
+  const treeStore = useTreeStore();
+
+  let cyRef: any;
   const [graph, setGraph] = useState<TreeNodeDefinition[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [layout, setLayout] = useState(cytoscapeLayouts[treeStore.layout]);
 
-    useEffect(() => {
+  useEffect(() => {
 
-        const worker = new Worker(new URL('../../core/workers/tree-worker.ts', import.meta.url));
+    fetch('/api/get-nodes', {
+      method: 'POST',
+      body: JSON.stringify({ limit: 500 }),
+    }).then((res) => res.json()).then((data: TreeNodeDefinition[]) => {
+      setGraph(data);
+      setLoading(false);
+    });
 
-        worker.postMessage({ type: 'GET_TREE', payload: treeData });
+  }, []);
 
-        worker.onmessage = (e: MessageEvent<WorkerBridge>) => {
-          setGraph(e.data.payload);
-          worker.terminate();
-          setLoading(false);
-        };
 
-        return () => {
-            worker.terminate();
-        }
+  useEffect(() => {
 
-    }, []);
+    if (!cyRef) {
+      return;
+    }
+
+    setLayout(cytoscapeLayouts[treeStore.layout]);
+
+  }, [treeStore.layout]);
+
+
+  const handleNodeClick = (evt: any) => {
+
+     if (evt.target === cyRef) {
+       treeStore.setSelected(null);
+       return;
+     }
+
+    const node = evt.target;
+    cyRef.center(node);
+
+    treeStore.setSelected(node.data());
+
+  }
+
 
   return (
       <div className="flex">
@@ -106,38 +115,28 @@ export function TreeInteractiveViewer() {
               <CytoscapeComponent
                   elements={graph}
                   stylesheet={styleSheet as any}
-                  style={{ width: '100vw', height: '100vh' }}
-                  zoomingEnabled={true}
                   layout={layout}
+                  zoomingEnabled={true}
                   maxZoom={1}
                   minZoom={0.1}
                   autounselectify={false}
                   boxSelectionEnabled={false}
+                  style={{ width: '100vw', height: '100vh' }}
                   cy={(cy) => {
-
-                      cy.on('tap', 'node', (evt) => {
-                          const node = evt.target;
-                          setSelectedNode(node.data());
-                          cy.center(node);
-                      });
-
-                      cy.on('tap', (evt) => {
-                          if (evt.target === cy) {
-                              setSelectedNode(null);
-                          }
-                      });
-
+                      cyRef = cy;
+                      cy.on('tap', 'node', handleNodeClick);
+                      cy.on('tap', handleNodeClick);
                   }}
               />
           )}
 
-        <TreePersonInfoDrawer
-            node={selectedNode}
-            setSelectedNode={setSelectedNode}
-        />
+        <TreePersonInfoDrawer />
 
         {loading && <Preloader />}
 
       </div>
   );
+
 }
+
+

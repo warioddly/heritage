@@ -1,14 +1,36 @@
 
 
-export default function Preloader(){
+type IconButtonProps = {
+    icon: any;
+    onClick?: () => void;
+    className?: string;
+}
+
+
+export default function IconButton(props: IconButtonProps) {
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center select-none">
-            <div className="absolute inset-0 bg-black bg-opacity-90"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center items-center">
-                <div className="rounded-full h-24 w-24 border-t-2 border-b-2 border-blue-500 animate-pulse"></div>
-                <p className="text-normal text-gray-400 mx-auto w-96 mt-2">Please wait this may take a while...</p>
+        <button
+            onClick={props.onClick}
+            type="button"
+            className={`
+                p-2 text-sm
+                font-medium text-gray-300 rounded-lg
+                focus:z-10 focus:ring-2
+                hover:text-white
+                hover:bg-blue-900
+                focus:ring-blue-500
+                focus:text-white
+                bg-black
+                bg-opacity-40
+                backdrop-filter
+                backdrop-blur-md
+                border-neutral-800 border
+                ${props.className}
+            `}>
+            <div className="flex items-center">
+                {props.icon}
             </div>
-        </div>
+        </button>
     )
 }

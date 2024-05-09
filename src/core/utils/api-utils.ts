@@ -1,70 +1,14 @@
-import {TreeNodeDataDefinition, TreeNodeDefinition} from "@/core/types/tree-definition";
-import {createTreeEdge} from "@/core/utils/utils";
+import fs from "fs";
+import {APP_API_DATA_FILE} from "@/core/data/constants";
 
 
-export function binaryTreeSearch(tree: TreeNodeDefinition[], id?: string): TreeNodeDefinition | undefined {
+export function getApiData() {
 
-    let start = 0;
-    let end = tree.length - 1;
+    const file = `${process.cwd()}/src/assets/data/${APP_API_DATA_FILE}`;
 
-    const target = parseInt(id || "");
-
-    if (tree.length === 0 || isNaN(target)) {
+    if (!fs.existsSync(file)) {
         return undefined;
     }
 
-    while (start <= end) {
-        const mid = Math.floor((start + end) / 2);
-
-        if (parseInt(tree[mid].data.id) === target) {
-            return tree[mid];
-        }
-        if (parseInt(tree[mid].data.id) < target) {
-            start = mid + 1;
-        } else {
-            end = mid - 1;
-        }
-    }
-    return undefined;
-}
-
-
-export function searchChildNodes(tree: TreeNodeDefinition[], id?: string): TreeNodeDataDefinition[] | undefined {
-    if (!id) {
-        return undefined;
-    }
-
-    const children: TreeNodeDataDefinition[] = [];
-
-    for (const node of tree) {
-        if (node.data.source === id) {
-            children.push(node.data);
-        }
-    }
-
-    return children;
-}
-
-
-export function createTreeEdges(nodes: TreeNodeDefinition[]): TreeNodeDefinition[] {
-
-    const edges: TreeNodeDefinition[] = [];
-
-    nodes.forEach((node: TreeNodeDefinition) => {
-
-        if (!node.data || node.data.id === '1') {
-            return;
-        }
-
-        edges.push({
-            data: {
-                id: `${node.data.source}-${node.data.id}`,
-                source: node.data.source,
-                target: node.data.id,
-            }
-        });
-
-    });
-
-    return nodes.concat(edges);
+    return fs.readFileSync(`${process.cwd()}/src/assets/data/${APP_API_DATA_FILE}`, 'utf8');
 }

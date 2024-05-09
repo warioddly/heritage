@@ -1,13 +1,30 @@
 import {NextResponse} from "next/server";
 import * as fs from "fs";
+import {getApiData} from "@/core/utils/api-utils";
+import {TreeNodeDefinition} from "@/core/types/tree-definition";
 
-export async function GET(request: Request) {
+export async function POST(request: Request) {
 
-    const data = fs.readFileSync(process.cwd() + '/src/assets/data/tree-data.json', 'utf8');
+    const body = await request.json();
 
-    if (data) {
-        return NextResponse.json(JSON.parse(data));
+    if (body.value) {
+
+        const data = getApiData();
+
+        if (!data) {
+            return NextResponse.json({ message:  "Something went wrong!" });
+        }
+
+        let nodes: TreeNodeDefinition[] = JSON.parse(data);
+
+        nodes = nodes.filter((item: any) => (item.data.name || "").toLowerCase().includes(body.value.toLowerCase()));
+
+        return NextResponse.json(nodes);
+    }
+    else {
+        return NextResponse.json({
+            message: "Please provide a value"
+        });
     }
 
-    return NextResponse.json({ message:  "Something went wrong!" });
 }
