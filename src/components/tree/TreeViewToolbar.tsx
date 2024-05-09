@@ -122,7 +122,7 @@ function TreeViewVariant() {
     const treeStore = useTreeStore();
 
     return (
-        <div className="z-30 absolute top-1/2 px-4 right-auto w-full md:w-auto md:right-0 md:px-4 ">
+        <div className="z-30 absolute top-1/2 px-4 right-0">
             <div className="flex flex-col gap-1 rounded-md shadow-sm" role="group">
 
                 <IconButton
