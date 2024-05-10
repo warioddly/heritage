@@ -33,10 +33,10 @@ export const theme: HeritageTheme = {
         primary: 'blue-700',
         secondary: 'gray',
         background: 'black',
-        border: 'neutral-800',
+        border: 'neutral-600',
     },
     typography: {
-        primary: 'gray-300',
+        primary: 'gray-200',
         secondary: 'gray-400',
         hover: 'white',
     },

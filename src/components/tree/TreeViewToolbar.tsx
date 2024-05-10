@@ -5,14 +5,20 @@ import {TreeNodeDefinition} from "@/core/types/tree-definition";
 import {debounce} from "@/core/utils/utils";
 import IconButton from "@/components/other/IconButton";
 import {useTreeStore} from "@/core/stores/tree";
-import {ECytoscapeLayouts} from "@/core/data/cytoscape-layouts";
 import {theme} from "@/core/styles/theme";
+import {ECytoscapeLayouts, ETreeHighlight} from "@/core/types/tree";
 
 export function TreeViewToolbar() {
+
+  const treeStore = useTreeStore();
+
   return (
       <>
-          <SearchField />
-          <TreeViewVariant />
+          <SearchField/>
+          <div className="flex flex-col gap-2 z-30 fixed top-1/2 px-4 right-0" role="group">
+              <TreeViewVariant/>
+              {treeStore.selected && <EdgeHighlightVariant/>}
+          </div>
       </>
   );
 }
@@ -25,7 +31,7 @@ function SearchField() {
     const [loading, setLoading] = useState(false);
     const debounceFilter = debounce(handleChange, 1500);
 
-    function handleChange (e: ChangeEvent<HTMLInputElement>) {
+    function handleChange(e: ChangeEvent<HTMLInputElement>) {
         setInputValue(e.target.value);
         filter();
     }
@@ -54,12 +60,12 @@ function SearchField() {
     return (
         <div className="z-20 fixed top-20 px-4 right-auto w-full md:w-auto md:right-0 md:px-4">
             <div className="w-full md:w-80 relative">
-            <div className="flex justify-between">
+                <div className="flex justify-between">
                     <label htmlFor="search" className="mb-2 text-sm font-medium sr-only text-white">Поиск</label>
-                       <input type="search"
-                              id="search"
-                              placeholder="Фамилия, имя, родословня..."
-                      className={`
+                    <input type="search"
+                           id="search"
+                           placeholder="Фамилия, имя, родословня..."
+                           className={`
                       block
                       w-full
                       p-3 
@@ -125,7 +131,7 @@ function TreeViewVariant() {
     const treeStore = useTreeStore();
 
     return (
-        <div className="flex flex-col gap-1 z-30 fixed top-1/2 px-4 right-0"  role="group">
+        <div className="flex flex-col gap-1" >
 
             <IconButton
                 onClick={() => treeStore.layout !== ECytoscapeLayouts.Cola && treeStore.setLayout(ECytoscapeLayouts.Cola)}
@@ -151,6 +157,40 @@ function TreeViewVariant() {
                     </svg>
                 )}/>
 
+        </div>
+    )
+}
+
+
+function EdgeHighlightVariant() {
+
+    const treeStore = useTreeStore();
+
+    return (
+        <div className="">
+            {
+                treeStore.highlightType !== ETreeHighlight.Predecessors
+                    ? (<IconButton
+                        onClick={() => treeStore.setHighlightType(ETreeHighlight.Predecessors)}
+                        icon={
+                            (
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 18.75 7.5-7.5 7.5 7.5"/>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 7.5-7.5 7.5 7.5"/>
+                                </svg>
+                            )
+                        }/>)
+                    : (<IconButton
+                        onClick={() => treeStore.setHighlightType(ETreeHighlight.Successors)}
+                        icon={(
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                                 stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round"
+                                      d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5"/>
+                            </svg>
+                        )}/>)
+            }
         </div>
     )
 }

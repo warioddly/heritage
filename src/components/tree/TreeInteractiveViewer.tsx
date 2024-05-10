@@ -4,7 +4,7 @@ import cola from 'cytoscape-cola';
 // @ts-ignore
 import dagre from 'cytoscape-dagre';
 import cytoscape, {CollectionReturnValue} from "cytoscape";
-import {TreeNodeDataDefinition, TreeNodeDefinition} from "@/core/types/tree-definition";
+import {TreeNodeDefinition} from "@/core/types/tree-definition";
 import CytoscapeComponent from 'react-cytoscapejs';
 import {useEffect, useState} from "react";
 import {TreePersonInfoDrawer} from "@/components/tree/TreePersonInfoDrawer";
@@ -12,7 +12,7 @@ import Preloader from "@/components/other/Preloader";
 import {cytoscapeLayouts} from "@/core/data/cytoscape-layouts";
 import {useTreeStore} from "@/core/stores/tree";
 import {cytoscapeThemes} from "@/core/styles/cytoscape-theme";
-
+import {ETreeHighlight} from "@/core/types/tree";
 
 
 export function TreeInteractiveViewer() {
@@ -27,6 +27,7 @@ export function TreeInteractiveViewer() {
   const [loading, setLoading] = useState<boolean>(true);
   const [layout, setLayout] = useState(cytoscapeLayouts[treeStore.layout]);
   const [highlighter, setHighlighter] = useState<CollectionReturnValue | null>(null)
+
 
   useEffect(() => {
 
@@ -52,21 +53,20 @@ export function TreeInteractiveViewer() {
   }, [treeStore.layout]);
 
 
+  useEffect(() => {
+
+    const evt = treeStore.event;
+
+    if (!evt) return;
+
+    handleHighlight(evt);
+
+  }, [treeStore.highlightType]);
+
+
   const handleNodeClick = (evt: any) => {
 
-    if (evt.target === cyRef || evt.target.group() == "edges")  {
-      highlighter?.removeClass('highlighted');
-    }
-    else {
-
-      if (highlighter) {
-        highlighter?.removeClass('highlighted');
-      }
-
-      setHighlighter(evt.target.predecessors());
-
-      evt.target.predecessors().addClass('highlighted')
-    }
+    handleHighlight(evt);
 
     if (evt.target !== cyRef && !evt.target.isNode()) {
       return;
@@ -79,23 +79,33 @@ export function TreeInteractiveViewer() {
   }
 
 
-  // async function fetchChildren(node: TreeNodeDataDefinition) {
+  const handleHighlight = (evt: any) => {
 
-    // if (!node) return;
+    if (evt.target === cyRef || evt.target.group() == "edges") {
+      highlighter?.removeClass('highlighted');
+      return;
+    }
 
-    // fetch('/api/get-node-children', {
-    //   method: 'POST',
-    //   body: JSON.stringify({id: node?.id}),
-    // })
-    //     .then(response => response.json())
-    //     .then((data: TreeNodeDefinition[]) => {
-    //
-    //       console.log(data);
-    //
-    //     })
-    //     .catch(error => console.error('Error:', error));
+    if (highlighter) {
+      highlighter?.removeClass('highlighted');
+    }
 
-  // }
+    if (treeStore.highlightType == ETreeHighlight.Successors) {
+
+      setHighlighter(evt.target.successors());
+
+      evt.target.successors().addClass('highlighted')
+    }
+    else {
+
+      setHighlighter(evt.target.predecessors());
+
+      evt.target.predecessors().addClass('highlighted')
+    }
+
+    treeStore.setEvent(evt);
+
+  }
 
 
   return (

@@ -1,8 +1,5 @@
+import {ECytoscapeLayouts} from "@/core/types/tree";
 
-export enum ECytoscapeLayouts {
-    Cola,
-    Dagre,
-}
 
 export const cytoscapeLayouts: { [key in ECytoscapeLayouts]: any; }  = {
     [ECytoscapeLayouts.Cola]: {
