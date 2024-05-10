@@ -1,3 +1,4 @@
+import {theme} from "@/core/styles/theme";
 
 
 type IconButtonProps = {
@@ -14,18 +15,18 @@ export default function IconButton(props: IconButtonProps) {
             onClick={props.onClick}
             type="button"
             className={`
-                p-2 text-sm
-                font-medium text-gray-300 rounded-lg
-                focus:z-10 focus:ring-2
-                hover:text-white
-                hover:bg-blue-900
-                focus:ring-blue-500
+                p-2
+                text-sm
+                text-${theme.typography.primary}
+                ${theme.border.radius}
+                hover:text-${theme.typography.hover}
+                hover:bg-${theme.button.primaryHover}
                 focus:text-white
+                ${theme.backgroundBlur}
+                border-${theme.colors.border}
+                border
                 bg-black
-                bg-opacity-40
-                backdrop-filter
-                backdrop-blur-md
-                border-neutral-800 border
+                hover:border-blue-700 
                 ${props.className}
             `}>
             <div className="flex items-center">

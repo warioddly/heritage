@@ -3,58 +3,16 @@
 import cola from 'cytoscape-cola';
 // @ts-ignore
 import dagre from 'cytoscape-dagre';
-import cytoscape from "cytoscape";
+import cytoscape, {CollectionReturnValue} from "cytoscape";
 import {TreeNodeDataDefinition, TreeNodeDefinition} from "@/core/types/tree-definition";
 import CytoscapeComponent from 'react-cytoscapejs';
 import {useEffect, useState} from "react";
 import {TreePersonInfoDrawer} from "@/components/tree/TreePersonInfoDrawer";
 import Preloader from "@/components/other/Preloader";
-import {cytoscapeLayouts, ECytoscapeLayouts} from "@/core/data/cytoscape-layouts";
+import {cytoscapeLayouts} from "@/core/data/cytoscape-layouts";
 import {useTreeStore} from "@/core/stores/tree";
+import {cytoscapeThemes} from "@/core/styles/cytoscape-theme";
 
-const styleSheet = [
-  {
-    selector: 'node',
-    style: {
-      backgroundColor: '#1d4ed8',
-      width: 30,
-      height: 30,
-      label: 'data(name)',
-      'z-index': '10',
-      color: 'white',
-      fontSize: 12,
-    },
-  },
-  {
-    selector: 'node:selected',
-    style: {
-      'border-width': '2px',
-      'border-color': '#AAD8FF',
-      'border-opacity': '0.5',
-      'background-color': '#77828C',
-      width: 30,
-      height: 30,
-      'text-outline-color': '#77828C',
-      'text-outline-width': 8,
-    },
-  },
-  {
-    selector: "node[type='parent']",
-    style: {
-      shape: 'ellipse',
-    },
-  },
-  {
-    selector: 'edge',
-    style: {
-      width: 2,
-      "line-color": "#2a3e79",
-      'target-arrow-color': '#2a3e79',
-      'target-arrow-shape': 'triangle',
-      'curve-style': 'bezier',
-    },
-  },
-];
 
 
 export function TreeInteractiveViewer() {
@@ -68,12 +26,13 @@ export function TreeInteractiveViewer() {
   const [graph, setGraph] = useState<TreeNodeDefinition[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [layout, setLayout] = useState(cytoscapeLayouts[treeStore.layout]);
+  const [highlighter, setHighlighter] = useState<CollectionReturnValue | null>(null)
 
   useEffect(() => {
 
     fetch('/api/get-nodes', {
       method: 'POST',
-      body: JSON.stringify({ limit: 500 }),
+      body: JSON.stringify({ limit: 800 }),
     }).then((res) => res.json()).then((data: TreeNodeDefinition[]) => {
       setGraph(data);
       setLoading(false);
@@ -95,17 +54,48 @@ export function TreeInteractiveViewer() {
 
   const handleNodeClick = (evt: any) => {
 
-     if (evt.target === cyRef) {
-       treeStore.setSelected(null);
-       return;
-     }
+    if (evt.target === cyRef || evt.target.group() == "edges")  {
+      highlighter?.removeClass('highlighted');
+    }
+    else {
+
+      if (highlighter) {
+        highlighter?.removeClass('highlighted');
+      }
+
+      setHighlighter(evt.target.predecessors());
+
+      evt.target.predecessors().addClass('highlighted')
+    }
+
+    if (evt.target !== cyRef && !evt.target.isNode()) {
+      return;
+    }
 
     const node = evt.target;
     cyRef.center(node);
-
     treeStore.setSelected(node.data());
 
   }
+
+
+  // async function fetchChildren(node: TreeNodeDataDefinition) {
+
+    // if (!node) return;
+
+    // fetch('/api/get-node-children', {
+    //   method: 'POST',
+    //   body: JSON.stringify({id: node?.id}),
+    // })
+    //     .then(response => response.json())
+    //     .then((data: TreeNodeDefinition[]) => {
+    //
+    //       console.log(data);
+    //
+    //     })
+    //     .catch(error => console.error('Error:', error));
+
+  // }
 
 
   return (
@@ -114,7 +104,7 @@ export function TreeInteractiveViewer() {
           {!loading && (
               <CytoscapeComponent
                   elements={graph}
-                  stylesheet={styleSheet as any}
+                  stylesheet={cytoscapeThemes as any}
                   layout={layout}
                   zoomingEnabled={true}
                   maxZoom={1}
@@ -124,8 +114,10 @@ export function TreeInteractiveViewer() {
                   style={{ width: '100vw', height: '100vh' }}
                   cy={(cy) => {
                       cyRef = cy;
-                      cy.on('tap', 'node', handleNodeClick);
                       cy.on('tap', handleNodeClick);
+                      cy.on('unselect', 'node', () => {
+                        treeStore.setSelected(null);
+                      });
                   }}
               />
           )}

@@ -1,9 +1,11 @@
 import Image from "next/image";
 import {Baffler} from "@/components/other/Baffler";
+import {theme} from "@/core/styles/theme";
+import TextButton from "@/components/other/TextButton";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
+    <main>
         <div className="relative h-screen flex flex-col items-center justify-center">
 
             <Image src="/images/logo/logo.jpg" alt="Heritage Logo" width={950} height={950} />
@@ -11,21 +13,20 @@ export default function Home() {
 
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center">
                 <h1 className="text-7xl md:text-9xl font-bold uppercase" onMouseEnter={Baffler}>Heritage</h1>
-                <p className="text-normal text-gray-400 mx-auto w-96">A family tree application that helps you to keep track of your family history</p>
+                <p className={`text-normal text-${theme.typography.secondary} mx-auto w-96`}>A family tree application that helps you to keep track of your family history</p>
                 <div className="flex mt-9 justify-center gap-2">
-                    <a
-                        href="/tree"
-                        className="bg-blue-800 text-neutral-200 py-2 px-4 rounded border border-blue-600 hover:bg-blue-900 hover:border-blue-700 hover:text-neutral-300">
-                        Get Started
-                    </a>
-                    <a
-                        href="/about"
-                        className="hover:bg-blue-900 text-neutral-200 font-bold py-2 px-4 rounded border border-neutral-600 backdrop-filter backdrop-blur-sm bg-black bg-opacity-30 hover:border-blue-700">
-                        Learn More
-                    </a>
+                    <TextButton
+                        text="Get Started"
+                        className={`bg-${theme.colors.primary} border-blue-700`}
+                        href='/tree'
+                    />
+                    <TextButton
+                        text="Learn More"
+                        href='/tree'
+                    />
                 </div>
             </div>
-            
+
         </div>
     </main>
   );

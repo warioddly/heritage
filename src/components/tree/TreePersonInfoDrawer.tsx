@@ -2,6 +2,7 @@
 import {TreeNodeDefinition} from "@/core/types/tree-definition";
 import {useEffect, useState} from "react";
 import {useTreeStore} from "@/core/stores/tree";
+import {theme} from "@/core/styles/theme";
 
 
 export function TreePersonInfoDrawer() {
@@ -12,7 +13,8 @@ export function TreePersonInfoDrawer() {
       <div className="w-auto" >
         <div id="drawer-info"
              className={`
-                fixed z-40 
+                fixed 
+                z-40 
                 p-4
                 w-full
                 bottom-0 
@@ -27,14 +29,11 @@ export function TreePersonInfoDrawer() {
                 md:top-20
                 md:w-80
                 md:bottom-auto
-                border-neutral-800
+                border-${theme.colors.border}
                 border
-                backdrop-filter 
-                backdrop-blur-md
-                bg-gray-800
-                bg-opacity-10
+                ${theme.backgroundBlur}
                 rounded-t-xl
-                md:rounded-xl
+                md:rounded-lg
                 transition-transform
                 duration-200 
                 ease-in-out`}
@@ -102,39 +101,49 @@ function DrawerContent({ handleClose }: {  handleClose: () => void }) {
     <div className="mb-6">
       <div className="mb-4">
         <div className="block text-sm font-normal text-gray-500">Имя</div>
-        <div className="text-sm md:text-base text-gray-300">{treeStore.selected?.name}</div>
+        <div className={`text-sm md:text-base text-${theme.typography.primary}`}>{treeStore.selected?.name}</div>
       </div>
 
       <div className="mb-4">
         <div className="block text-sm font-normal text-gray-500">Имя отца</div>
-        <div className="text-sm md:text-base text-gray-300">
-          { treeStore.selected?.fullName || '-' }
+        <div className={`text-sm md:text-base text-${theme.typography.primary}`}>
+          {treeStore.selected?.fullName || '-'}
         </div>
       </div>
 
-      {/*<div className="mb-4">*/}
-      {/*  <div className="block text-sm font-normal text-gray-500">Родословная</div>*/}
-      {/*  <div className="text-sm md:text-base text-gray-300">-</div>*/}
-      {/*</div>*/}
-
       <div className="mb-4">
         <div className="block text-sm font-normal text-gray-500">Биография</div>
-        <div className="text-sm md:text-base text-gray-300">-</div>
+        <div className={`text-sm md:text-base text-${theme.typography.primary}`}>-</div>
+      </div>
+
+      <div className="mb-4">
+        <div className="block text-sm font-normal text-gray-500">Подробнее</div>
+        <a
+            href={`${treeStore.selected?.url ? treeStore.selected!.url : '#'}`}
+            target="_blank"
+            className={`text-sm md:text-base text-${theme.typography.primary} flex items-center hover:text-${theme.typography.hover}`}>
+          Посмотреть
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+               stroke="currentColor" className="ms-2 w-4 h-4">
+            <path strokeLinecap="round" strokeLinejoin="round"
+                  d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/>
+          </svg>
+        </a>
       </div>
 
       <div className="mb-4">
         <div className="block text-sm font-normal text-gray-500 mb-1">Дети</div>
         <div className="text-gray-300 flex flex-wrap gap-1.5">
           {childrenNodes.length === 0 && <div className="text-sm md:text-base text-gray-300">-</div>}
-          {childrenNodes && childrenNodes.map((n, index) => (
+          {Array.isArray(childrenNodes) && childrenNodes.map((n, index) => (
               <p
-                 key={index}
-                 className="hover:bg-blue-800 text-gray-200
+                  key={index}
+                  className={`hover:bg-blue-800 text-${theme.typography.primary}
                   text-sm px-2.5 py-0.5 rounded
                   cursor-pointer
-                  border border-neutral-500 inline-flex items-center justify-center"
+                  border border-neutral-500 inline-flex items-center justify-center`}
               >{n.data.name}</p>
-            ))}
+          ))}
         </div>
       </div>
 

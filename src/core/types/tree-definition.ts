@@ -5,13 +5,7 @@ type Position = {
     y: number;
 }
 
-export interface TreeDefinition {
-    nodes: TreeNodeDefinition[];
-    edges: TreeNodeDefinition[];
-}
-
 export interface TreeNodeDefinition {
-    group?: "nodes" | "edges" | undefined;
     data: TreeNodeDataDefinition;
     /**
      * Scratchpad data (usually temp or nonserialisable data)
@@ -58,20 +52,9 @@ export interface TreeNodeDefinition {
      */
 }
 
-export interface _TreeNodeDataDefinition {
+export interface TreeNodeDataDefinition {
     id: string;
+    source: string;
     position?: Position | undefined;
-}
-
-export interface TreeEdgeDataDefinition extends _TreeNodeDataDefinition {
-    id: string;
-    source: string;
-    target: string;
-    [key: string]: any;
-}
-
-export interface TreeNodeDataDefinition extends _TreeNodeDataDefinition {
-    id: string;
-    source: string;
     [key: string]: any;
 }

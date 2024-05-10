@@ -1,11 +1,12 @@
-import {TreeViewLayout} from "@/components/tree/TreeViewLayout";
+import {TreeInteractiveViewer} from "@/components/tree/TreeInteractiveViewer";
+import {TreeViewToolbar} from "@/components/tree/TreeViewToolbar";
 
 
 export default function Tree(){
-
     return (
-        <main className="flex flex-col items-center justify-between">
-            <TreeViewLayout />
+        <main>
+            <TreeInteractiveViewer/>
+            <TreeViewToolbar/>
         </main>
     )
 }

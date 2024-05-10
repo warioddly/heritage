@@ -7,16 +7,16 @@ export enum ECytoscapeLayouts {
 export const cytoscapeLayouts: { [key in ECytoscapeLayouts]: any; }  = {
     [ECytoscapeLayouts.Cola]: {
         name: 'cola',
-        infinite: true,
+        infinite: false,
         animate: true,
-        directed: true,
-        avoidOverlap: true,
+        directed: false,
+        avoidOverlap: false,
         fit: false,
         padding: 30,
         nodeDimensionsIncludeLabels: false,
         randomize: false,
         handleDisconnected: false,
-        convergenceThreshold: 0.01,
+        convergenceThreshold: 1.01,
     },
     [ECytoscapeLayouts.Dagre]: {
         name: 'dagre',
