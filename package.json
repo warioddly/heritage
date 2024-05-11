@@ -10,6 +10,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-three/drei": "^9.105.6",
+    "@react-three/fiber": "^8.16.6",
+    "@types/three": "^0.164.0",
     "baffle": "^0.3.6",
     "cytoscape-cola": "^2.5.1",
     "cytoscape-dagre": "^2.5.0",
@@ -17,6 +20,7 @@
     "react": "^18",
     "react-cytoscapejs": "^2.0.0",
     "react-dom": "^18",
+    "three": "^0.164.1",
     "webcola": "^3.4.0",
     "zustand": "^4.5.2"
   },

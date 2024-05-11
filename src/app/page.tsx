@@ -22,7 +22,7 @@ export default function Home() {
                     />
                     <TextButton
                         text="Learn More"
-                        href='/tree'
+                        href='/about'
                     />
                 </div>
             </div>
