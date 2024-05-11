@@ -1,13 +1,12 @@
 'use client';
-
 import React, {useEffect, useRef, useState} from "react";
 import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
-import {useAspect, useVideoTexture, useTexture, PerspectiveCamera, OrthographicCamera} from '@react-three/drei'
+import {useAspect, useVideoTexture, OrthographicCamera} from '@react-three/drei'
 
 
 export default function AnimatedVideoBackground(props: { src: string }) {
-    
+
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const containerRef = useRef<HTMLDivElement>(null);
 
