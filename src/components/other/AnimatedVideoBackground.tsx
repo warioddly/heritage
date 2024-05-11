@@ -26,7 +26,7 @@ export default function AnimatedVideoBackground(props: { src: string }) {
 
     return (
         <div ref={containerRef} className="absolute left-0 w-screen h-screen">
-            <Canvas >
+            <Canvas style={{ background: 'transparent' }}>
                 <OrthographicCamera position={[0, 0, 1]} far={5} zoom={1} near={0.1} >
                     <Scene src={props.src} mousePosition={mousePosition} />
                 </OrthographicCamera>
@@ -43,16 +43,19 @@ function Scene(props: { src: string, mousePosition: { x: number, y: number } }) 
     const rotationParallaxAmount = .0001;
     const positionParallaxAmount = .0005;
 
-    const rotationX = (mousePosition.y - window.innerHeight / 2) * rotationParallaxAmount;
-    const rotationY = (mousePosition.x - window.innerWidth / 2) * rotationParallaxAmount;
+    const x = mousePosition.x - window.innerWidth / 2;
+    const y = mousePosition.y - window.innerHeight / 2;
 
-    const positionX = (mousePosition.x - window.innerWidth / 2) * positionParallaxAmount;
-    const positionY = (mousePosition.y - window.innerHeight / 2) * positionParallaxAmount;
+    const rotationX = y * rotationParallaxAmount;
+    const rotationY = x * rotationParallaxAmount;
+
+    const positionX = x * positionParallaxAmount;
+    const positionY = y * positionParallaxAmount;
 
     return (
         <mesh scale={size} rotation={[rotationX, rotationY, 0]} position={[positionX, positionY, 0]}>
             <planeGeometry args={[1, 1]} />
-            <Suspense fallback={<meshBasicMaterial toneMapped={false}/>}>
+            <Suspense fallback={<meshBasicMaterial color="black" />}>
                 <VideoMaterial url={src} />
             </Suspense>
         </mesh>

@@ -29,8 +29,8 @@ export function TreePersonInfoDrawer() {
                 md:top-20
                 md:w-80
                 md:bottom-auto
-                border-${theme.colors.border}
                 border
+                ${theme.border.color}
                 ${theme.backgroundBlur}
                 rounded-t-xl
                 md:rounded-lg
@@ -101,19 +101,19 @@ function DrawerContent({ handleClose }: {  handleClose: () => void }) {
     <div className="mb-6">
       <div className="mb-4">
         <div className="block text-sm font-normal text-gray-500">Имя</div>
-        <div className={`text-sm md:text-base text-${theme.typography.primary}`}>{treeStore.selected?.name}</div>
+        <div className={`text-sm md:text-base ${theme.typography.primary}`}>{treeStore.selected?.name}</div>
       </div>
 
       <div className="mb-4">
         <div className="block text-sm font-normal text-gray-500">Имя отца</div>
-        <div className={`text-sm md:text-base text-${theme.typography.primary}`}>
+        <div className={`text-sm md:text-base ${theme.typography.primary}`}>
           {treeStore.selected?.fullName || '-'}
         </div>
       </div>
 
       <div className="mb-4">
         <div className="block text-sm font-normal text-gray-500">Биография</div>
-        <div className={`text-sm md:text-base text-${theme.typography.primary}`}>-</div>
+        <div className={`text-sm md:text-base ${theme.typography.primary}`}>-</div>
       </div>
 
       <div className="mb-4">
@@ -121,7 +121,7 @@ function DrawerContent({ handleClose }: {  handleClose: () => void }) {
         <a
             href={`${treeStore.selected?.url ? treeStore.selected!.url : '#'}`}
             target="_blank"
-            className={`text-sm md:text-base text-${theme.typography.primary} flex items-center hover:text-${theme.typography.hover}`}>
+            className={`text-sm md:text-base ${theme.typography.primary} flex items-center hover:text-${theme.typography.hover}`}>
           Посмотреть
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                stroke="currentColor" className="ms-2 w-4 h-4">
@@ -138,10 +138,12 @@ function DrawerContent({ handleClose }: {  handleClose: () => void }) {
           {Array.isArray(childrenNodes) && childrenNodes.map((n, index) => (
               <p
                   key={index}
-                  className={`hover:bg-blue-800 text-${theme.typography.primary}
+                  className={`hover:${theme.button.primaryHover} ${theme.typography.primary}
                   text-sm px-2.5 py-0.5 rounded
                   cursor-pointer
-                  border border-neutral-500 inline-flex items-center justify-center`}
+                  border ${theme.border.color}
+                  inline-flex items-center justify-center
+                  `}
               >{n.data.name}</p>
           ))}
         </div>

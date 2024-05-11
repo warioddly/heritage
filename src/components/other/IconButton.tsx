@@ -15,18 +15,17 @@ export default function IconButton(props: IconButtonProps) {
             onClick={props.onClick}
             type="button"
             className={`
-                p-2
-                text-sm
-                text-${theme.typography.primary}
-                ${theme.border.radius}
-                hover:text-${theme.typography.hover}
-                hover:bg-${theme.button.primaryHover}
+                p-2 text-sm
                 focus:text-white
+                ${theme.typography.primary}
+                ${theme.border.radius}
+                hover:${theme.typography.hover}
+                hover:${theme.button.primaryHover}
                 ${theme.backgroundBlur}
-                border-${theme.colors.border}
+                ${theme.border.color}
                 border
                 bg-black
-                hover:border-blue-700 
+                hover:border-blue-700
                 ${props.className}
             `}>
             <div className="flex items-center">

@@ -72,16 +72,16 @@ function SearchField() {
                       text-sm
                       rounded-l-lg
                       outline-none
-                      text-${theme.typography.primary}
                       focus:border-blue-700
                       bg-black
+                      text-${theme.typography.primary}
                       ${theme.backgroundBlur}
-                      border-${theme.colors.border}
+                      ${theme.border.color}
                       border`}
                         onChange={debounceFilter}
                      />
 
-                       <button type="submit"  className={`flex justify-center items-center text-${theme.typography.primary} end-1.5 bottom-2 bg-${theme.button.primary} hover:bg-${theme.button.primaryHover} outline-none rounded-r-lg text-sm px-4 py-2 border-${theme.colors.border} ${theme.backgroundBlur} border bg-black hover:border-blue-700 `}>
+                       <button type="submit"  className={`flex justify-center items-center ${theme.typography.primary} end-1.5 bottom-2 ${theme.button.primary} hover:bg-${theme.button.primaryHover} outline-none rounded-r-lg text-sm px-4 py-2 ${theme.border.color} ${theme.backgroundBlur} border bg-black hover:border-blue-700 `}>
                            <svg className="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                            </svg>
@@ -99,7 +99,7 @@ function SearchField() {
 
                 {
                     loading && (<div className={`max-h-60 w-full overflow-hidden overflow-y-scroll pt-2 bg-gray-500 ${theme.backgroundBlur} ${theme.border.radius} p-2 mt-2`}>
-                        <p className={`text-${theme.typography.primary} text-sm`}>Загрузка...</p>
+                        <p className={`${theme.typography.primary} text-sm`}>Загрузка...</p>
                     </div>)
                 }
 
@@ -109,7 +109,7 @@ function SearchField() {
                             <ul className="">
                                 {
                                     filteredData.map((node, index) => (
-                                        <li key={index} className={`text-${theme.typography.primary} text-sm p-2 hover:bg-blue-800 cursor-pointer rounded-md`}>
+                                        <li key={index} className={`${theme.typography.primary} text-sm p-2 hover:bg-blue-800 cursor-pointer rounded-md`}>
                                             {node.data.name}
                                         </li>
                                     ))
@@ -148,7 +148,7 @@ function TreeViewVariant() {
 
             <IconButton
                 onClick={() => treeStore.layout !== ECytoscapeLayouts.Dagre && treeStore.setLayout(ECytoscapeLayouts.Dagre)}
-                className={treeStore.layout === ECytoscapeLayouts.Dagre ? `bg-${theme.button.primary}` : ''}
+                className={treeStore.layout === ECytoscapeLayouts.Dagre ? theme.button.primary : ''}
                 icon={(
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                          stroke="currentColor" className="w-6 h-6">

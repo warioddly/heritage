@@ -13,7 +13,7 @@ export default function Home() {
 
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center">
                 <h1 className="text-7xl md:text-9xl font-bold uppercase" onMouseEnter={Baffler}>Heritage</h1>
-                <p className={`text-normal text-${theme.typography.secondary} mx-auto w-96`}>A family tree application that helps you to keep track of your family history</p>
+                <p className={`text-normal ${theme.typography.secondary} mx-auto w-96`}>A family tree application that helps you to keep track of your family history</p>
                 <div className="flex mt-9 justify-center gap-2">
                     <TextButton
                         text="Get Started"

@@ -10,20 +10,20 @@ type HeritageTheme = {
         primary: TailwindColorWithShade;
         secondary: TailwindColorWithShade;
         background: TailwindColorWithShade;
-        border: TailwindColorWithShade;
     },
     typography: {
-        primary: TailwindColorWithShade;
-        secondary: TailwindColorWithShade;
-        hover: TailwindColorWithShade;
+        primary: `text-${TailwindColorWithShade}`;
+        secondary: `text-${TailwindColorWithShade}`;
+        hover: `text-${TailwindColorWithShade}`;
     },
     border: {
+        color: `border-${TailwindColorWithShade}`;
         radius: TailwindBorderRadius;
     },
     button: {
-        primary: TailwindColorWithShade,
-        secondary: TailwindColorWithShade,
-        primaryHover: TailwindColorWithShade,
+        primary: `bg-${TailwindColorWithShade}`,
+        secondary: `bg-${TailwindColorWithShade}`,
+        primaryHover: `bg-${TailwindColorWithShade}`,
     }
     backgroundBlur: TailwindBlur
 }
@@ -33,20 +33,20 @@ export const theme: HeritageTheme = {
         primary: 'blue-700',
         secondary: 'gray',
         background: 'black',
-        border: 'neutral-600',
     },
     typography: {
-        primary: 'gray-200',
-        secondary: 'gray-400',
-        hover: 'white',
+        primary: 'text-gray-200',
+        secondary: 'text-gray-400',
+        hover: 'text-white',
     },
     button: {
-        primary: 'blue-700',
-        secondary: 'black-700',
-        primaryHover: 'blue-900',
+        primary: 'bg-blue-700',
+        secondary: 'bg-black-700',
+        primaryHover: 'bg-blue-800',
     },
     border: {
         radius: 'rounded-lg',
+        color: 'border-neutral-600',
     },
     backgroundBlur: 'backdrop-filter backdrop-blur-md bg-opacity-60'
 }

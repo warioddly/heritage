@@ -29,9 +29,8 @@ export function Header() {
         <header className={`
             flex justify-between items-center w-full h-16 px-4 
             text-white
-            fixed nav
-            border-b z-10
-            border-${theme.colors.border} 
+            fixed nav border-b z-50
+            ${theme.border.color} 
             ${theme.backgroundBlur}
         `}>
 
@@ -54,7 +53,7 @@ export function Header() {
                         <div
                             key={link.id}
                             className={`nav-links px-2 cursor-pointer uppercase font-normal ${
-                                pathname === link.link ? `text-${theme.typography.primary}` : `text-${theme.typography.secondary} hover:text-${theme.typography.hover} transition-colors duration-300`
+                                pathname === link.link ? theme.typography.primary : `${theme.typography.secondary} hover:text-blue-500 transition-colors duration-300`
                             }`}
                         >
                             <a href={link.link} onMouseEnter={Baffler}>{link.label}</a>
