@@ -48,6 +48,7 @@ export type TailwindBorderRadius =
     | "rounded-3xl"
     | "rounded-full";
 
+
 export type TailwindBlur =
     | 'backdrop-filter backdrop-blur-sm bg-opacity-20'
     | 'backdrop-filter backdrop-blur-md bg-opacity-20'

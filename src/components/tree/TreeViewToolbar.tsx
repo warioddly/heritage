@@ -3,10 +3,9 @@
 import {ChangeEvent, useState} from "react";
 import {TreeNodeDefinition} from "@/core/types/tree-definition";
 import {debounce} from "@/core/utils/utils";
-import IconButton from "@/components/other/IconButton";
 import {useTreeStore} from "@/core/stores/tree";
 import {theme} from "@/core/styles/theme";
-import {ECytoscapeLayouts, ETreeHighlight} from "@/core/types/tree";
+import {TreeViewActions} from "@/components/tree/TreeViewActions";
 
 export function TreeViewToolbar() {
 
@@ -15,9 +14,8 @@ export function TreeViewToolbar() {
   return (
       <>
           <SearchField/>
-          <div className="flex flex-col gap-2 z-30 fixed top-1/2 px-4 right-0" role="group">
-              <TreeViewVariant/>
-              {treeStore.selected && <EdgeHighlightVariant/>}
+          <div className={`flex flex-col gap-2 z-30 fixed ${treeStore.selected ? "top-1/3" : "top-1/2"} px-4 right-0`} role="group">
+              <TreeViewActions />
           </div>
       </>
   );
@@ -26,35 +24,41 @@ export function TreeViewToolbar() {
 
 function SearchField() {
 
+    const treeStore = useTreeStore();
+
     const [inputValue, setInputValue] = useState("");
     const [filteredData, setFilteredData] = useState<TreeNodeDefinition[]>([]);
     const [loading, setLoading] = useState(false);
-    const debounceFilter = debounce(handleChange, 1500);
+    const debounceFilter = debounce(handleChange, 1e3);
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
+        setLoading(true);
         setInputValue(e.target.value);
         filter();
     }
 
     function filter() {
 
-        setLoading(true);
 
         fetch('/api/search-node', {
             method: 'POST',
             body: JSON.stringify({value: inputValue}),
-            headers: {
-                'Content-Type': 'application/json'
-            }
         })
             .then(response => response.json())
-            .then((data: TreeNodeDefinition[]) => {
-                setFilteredData(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            })
+            .then((data: TreeNodeDefinition[]) => setFilteredData(data))
+            .catch(error => console.error('Error:', error))
             .finally(() => setLoading(false));
+    }
+
+
+    const handleClick = (node: TreeNodeDefinition) => {
+
+        if (!node.data.id) {
+            return;
+        }
+
+        treeStore.setSelected(node.data)
+        setInputValue("");
     }
 
     return (
@@ -62,30 +66,18 @@ function SearchField() {
             <div className="w-full md:w-80 relative">
                 <div className="flex justify-between">
                     <label htmlFor="search" className="mb-2 text-sm font-medium sr-only text-white">Поиск</label>
-                    <input type="search"
-                           id="search"
-                           placeholder="Фамилия, имя, родословня..."
-                           className={`
-                      block
-                      w-full
-                      p-3 
-                      text-sm
-                      rounded-l-lg
-                      outline-none
-                      focus:border-blue-700
-                      bg-black
-                      text-${theme.typography.primary}
-                      ${theme.backgroundBlur}
-                      ${theme.border.color}
-                      border`}
+                    <input
+                        type="search"
+                        id="search"
+                        placeholder="Фамилия, имя, родословня..."
+                        className={`block w-full p-3 text-sm outline-none focus:border-blue-700 bg-black text-${theme.typography.primary} ${theme.backgroundBlur} ${theme.border.color} ${theme.border.radius} border`}
                         onChange={debounceFilter}
                      />
-
-                       <button type="submit"  className={`flex justify-center items-center ${theme.typography.primary} end-1.5 bottom-2 ${theme.button.primary} hover:bg-${theme.button.primaryHover} outline-none rounded-r-lg text-sm px-4 py-2 ${theme.border.color} ${theme.backgroundBlur} border bg-black hover:border-blue-700 `}>
-                           <svg className="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                           </svg>
-                       </button>
+                       {/*<button type="submit"  className={`flex justify-center items-center ${theme.typography.primary} end-1.5 bottom-2 ${theme.button.primary} hover:bg-${theme.button.primaryHover} outline-none rounded-r-lg text-sm px-4 py-2 ${theme.border.color} ${theme.backgroundBlur} border bg-black hover:border-blue-700 `}>*/}
+                       {/*    <svg className="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">*/}
+                       {/*        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>*/}
+                       {/*    </svg>*/}
+                       {/*</button>*/}
                </div>
 
 
@@ -109,7 +101,10 @@ function SearchField() {
                             <ul className="">
                                 {
                                     filteredData.map((node, index) => (
-                                        <li key={index} className={`${theme.typography.primary} text-sm p-2 hover:bg-blue-800 cursor-pointer rounded-md`}>
+                                        <li key={index}
+                                            className={`${theme.typography.primary} text-sm p-2 hover:bg-blue-800 cursor-pointer rounded-md`}
+                                            onClick={() => handleClick(node)}
+                                        >
                                             {node.data.name}
                                         </li>
                                     ))
@@ -121,76 +116,6 @@ function SearchField() {
 
 
             </div>
-        </div>
-    )
-}
-
-
-function TreeViewVariant() {
-
-    const treeStore = useTreeStore();
-
-    return (
-        <div className="flex flex-col gap-1" >
-
-            <IconButton
-                onClick={() => treeStore.layout !== ECytoscapeLayouts.Cola && treeStore.setLayout(ECytoscapeLayouts.Cola)}
-                className={treeStore.layout === ECytoscapeLayouts.Cola ? `bg-${theme.button.primary}` : ''}
-                icon={
-                (
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                         stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="m21 7.5-2.25-1.313M21 7.5v2.25m0-2.25-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3 2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75 2.25-1.313M12 21.75V19.5m0 2.25-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25"/>
-                    </svg>
-                )
-            } />
-
-            <IconButton
-                onClick={() => treeStore.layout !== ECytoscapeLayouts.Dagre && treeStore.setLayout(ECytoscapeLayouts.Dagre)}
-                className={treeStore.layout === ECytoscapeLayouts.Dagre ? theme.button.primary : ''}
-                icon={(
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                         stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"/>
-                    </svg>
-                )}/>
-
-        </div>
-    )
-}
-
-
-function EdgeHighlightVariant() {
-
-    const treeStore = useTreeStore();
-
-    return (
-        <div className="">
-            {
-                treeStore.highlightType !== ETreeHighlight.Predecessors
-                    ? (<IconButton
-                        onClick={() => treeStore.setHighlightType(ETreeHighlight.Predecessors)}
-                        icon={
-                            (
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 18.75 7.5-7.5 7.5 7.5"/>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 7.5-7.5 7.5 7.5"/>
-                                </svg>
-                            )
-                        }/>)
-                    : (<IconButton
-                        onClick={() => treeStore.setHighlightType(ETreeHighlight.Successors)}
-                        icon={(
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                                 stroke="currentColor" className="w-6 h-6">
-                                <path strokeLinecap="round" strokeLinejoin="round"
-                                      d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5"/>
-                            </svg>
-                        )}/>)
-            }
         </div>
     )
 }

@@ -22,7 +22,6 @@ export function TreeInteractiveViewer() {
 
   const treeStore = useTreeStore();
 
-  let cyRef: any;
   const [graph, setGraph] = useState<TreeNodeDefinition[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [layout, setLayout] = useState(cytoscapeLayouts[treeStore.layout]);
@@ -33,7 +32,7 @@ export function TreeInteractiveViewer() {
 
     fetch('/api/get-nodes', {
       method: 'POST',
-      body: JSON.stringify({ limit: 800 }),
+      body: JSON.stringify({ limit: 1200 }),
     }).then((res) => res.json()).then((data: TreeNodeDefinition[]) => {
       setGraph(data);
       setLoading(false);
@@ -44,7 +43,7 @@ export function TreeInteractiveViewer() {
 
   useEffect(() => {
 
-    if (!cyRef) {
+    if (!treeStore.cy) {
       return;
     }
 
@@ -68,20 +67,21 @@ export function TreeInteractiveViewer() {
 
     handleHighlight(evt);
 
-    if (evt.target !== cyRef && !evt.target.isNode()) {
+    const target = evt.target;
+
+    if (target === treeStore.cy || !target.isNode()) {
+      treeStore.setSelected(null);
       return;
     }
 
-    const node = evt.target;
-    cyRef.center(node);
-    treeStore.setSelected(node.data());
+    treeStore.setSelected(target.data());
 
   }
 
 
   const handleHighlight = (evt: any) => {
 
-    if (evt.target === cyRef || evt.target.group() == "edges") {
+    if (evt.target === treeStore.cy || evt.target.group() == "edges") {
       highlighter?.removeClass('highlighted');
       return;
     }
@@ -122,12 +122,9 @@ export function TreeInteractiveViewer() {
                   autounselectify={false}
                   boxSelectionEnabled={false}
                   style={{ width: '100vw', height: '100vh' }}
-                  cy={(cy) => {
-                      cyRef = cy;
+                  cy={(cy: cytoscape.Core) => {
+                      treeStore.cy = cy;
                       cy.on('tap', handleNodeClick);
-                      cy.on('unselect', 'node', () => {
-                        treeStore.setSelected(null);
-                      });
                   }}
               />
           )}
