@@ -6,7 +6,7 @@ import dagre from 'cytoscape-dagre';
 import cytoscape, {CollectionReturnValue} from "cytoscape";
 import {TreeNodeDefinition} from "@/core/types/tree-definition";
 import CytoscapeComponent from 'react-cytoscapejs';
-import {useEffect, useState} from "react";
+import {useEffect, useState, createRef, useRef, RefObject, use} from "react";
 import {TreePersonInfoDrawer} from "@/components/tree/TreePersonInfoDrawer";
 import Preloader from "@/components/other/Preloader";
 import {cytoscapeLayouts} from "@/core/data/cytoscape-layouts";
@@ -22,12 +22,12 @@ export function TreeInteractiveViewer() {
 
   const treeStore = useTreeStore();
 
-  let cyRef: any;
+  const cyRef = useRef<cytoscape.Core | undefined>();
   const [graph, setGraph] = useState<TreeNodeDefinition[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [layout, setLayout] = useState(cytoscapeLayouts[treeStore.layout]);
   const [highlighter, setHighlighter] = useState<CollectionReturnValue | null>(null)
-
+  const [isReady, setIsReady] = useState<boolean>(false);
 
   useEffect(() => {
 
@@ -44,7 +44,7 @@ export function TreeInteractiveViewer() {
 
   useEffect(() => {
 
-    if (!cyRef) {
+    if (!cyRef.current) {
       return;
     }
 
@@ -68,12 +68,14 @@ export function TreeInteractiveViewer() {
 
     handleHighlight(evt);
 
-    if (evt.target !== cyRef && !evt.target.isNode()) {
+    if (evt.target !== cyRef.current && !evt.target.isNode()) {
       return;
     }
 
     const node = evt.target;
-    cyRef.center(node);
+    if (cyRef.current) {
+      cyRef.current.center(node);
+    }
     treeStore.setSelected(node.data());
 
   }
@@ -81,7 +83,7 @@ export function TreeInteractiveViewer() {
 
   const handleHighlight = (evt: any) => {
 
-    if (evt.target === cyRef || evt.target.group() == "edges") {
+    if (evt.target === cyRef.current || evt.target.group() == "edges") {
       highlighter?.removeClass('highlighted');
       return;
     }
@@ -107,7 +109,13 @@ export function TreeInteractiveViewer() {
 
   }
 
-
+  useEffect(() => {
+    if (cyRef.current) {
+      cyRef.current.one('render', () => {
+        cyRef.current?.center(cyRef.current.$('#1'))
+      })
+    }
+  }, [isReady]);
   return (
       <div className="flex">
 
@@ -123,12 +131,14 @@ export function TreeInteractiveViewer() {
                   boxSelectionEnabled={false}
                   style={{ width: '100vw', height: '100vh' }}
                   cy={(cy) => {
-                      cyRef = cy;
+                      cyRef.current = cy;
                       cy.on('tap', handleNodeClick);
                       cy.on('unselect', 'node', () => {
                         treeStore.setSelected(null);
                       });
-                      cy.center(cy.$('#1'));
+                      if (cy) {
+                        setIsReady(true);
+                      }
                   }}
               />
           )}
