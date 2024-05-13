@@ -6,7 +6,7 @@ import dagre from 'cytoscape-dagre';
 import cytoscape, {CollectionReturnValue} from "cytoscape";
 import {TreeNodeDefinition} from "@/core/types/tree-definition";
 import CytoscapeComponent from 'react-cytoscapejs';
-import {useEffect, useState, createRef, useRef, RefObject, use} from "react";
+import {useEffect, useState, useRef} from "react";
 import {TreePersonInfoDrawer} from "@/components/tree/TreePersonInfoDrawer";
 import Preloader from "@/components/other/Preloader";
 import {cytoscapeLayouts} from "@/core/data/cytoscape-layouts";
