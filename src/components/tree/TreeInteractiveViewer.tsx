@@ -30,17 +30,6 @@ export function TreeInteractiveViewer() {
 
   useEffect(() => {
 
-    if (loading) {
-      return;
-    }
-
-    treeStore.cy.fit();
-
-  }, [loading]);
-
-
-  useEffect(() => {
-
     fetch('/api/get-nodes', {
       method: 'POST',
       body: JSON.stringify({ limit: 1200 }),
@@ -133,7 +122,7 @@ export function TreeInteractiveViewer() {
                   autounselectify={false}
                   boxSelectionEnabled={false}
                   style={{ width: '100vw', height: '100vh' }}
-                  cy={(cy) => {
+                  cy={(cy: cytoscape.Core) => {
                       treeStore.cy = cy;
                       cy.on('tap', handleNodeClick);
                   }}

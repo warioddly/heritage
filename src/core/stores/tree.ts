@@ -1,10 +1,11 @@
 import { create } from 'zustand'
 import {TreeNodeDataDefinition} from "@/core/types/tree-definition";
 import {ECytoscapeLayouts, ETreeHighlight} from "@/core/types/tree";
+import cytoscape from "cytoscape";
 
 
 type TTreeStore = {
-    cy: any;
+    cy: cytoscape.Core | null;
     event: MouseEvent | null;
     selected: TreeNodeDataDefinition | null;
     layout: ECytoscapeLayouts;
@@ -13,7 +14,6 @@ type TTreeStore = {
     setSelected: (selected: TreeNodeDataDefinition | null) => void;
     setHighlightType: (highlightType: ETreeHighlight) => void;
     setEvent: (event: any) => void;
-    setCy: (cy?: any) => void;
 }
 
 export const useTreeStore = create<TTreeStore>((set, get) => ({
@@ -38,5 +38,4 @@ export const useTreeStore = create<TTreeStore>((set, get) => ({
     },
     setHighlightType: (highlightType) => set(() => ({ highlightType })),
     setEvent: (event) => set(() => ({ event })),
-    setCy: (cy?: any) => set(() => ({ cy })),
 }))
