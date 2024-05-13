@@ -128,6 +128,7 @@ export function TreeInteractiveViewer() {
                       cy.on('unselect', 'node', () => {
                         treeStore.setSelected(null);
                       });
+                      cy.center(cy.$('#1'));
                   }}
               />
           )}
