@@ -26,40 +26,41 @@ export function TreeViewToolbar() {
 
 function SearchField() {
 
+    const treeStore = useTreeStore();
+
     const [inputValue, setInputValue] = useState("");
     const [filteredData, setFilteredData] = useState<TreeNodeDefinition[]>([]);
     const [loading, setLoading] = useState(false);
     const debounceFilter = debounce(handleChange, 1e3);
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
+        setLoading(true);
         setInputValue(e.target.value);
         filter();
     }
 
     function filter() {
 
-        setLoading(true);
 
         fetch('/api/search-node', {
             method: 'POST',
             body: JSON.stringify({value: inputValue}),
-            headers: {
-                'Content-Type': 'application/json'
-            }
         })
             .then(response => response.json())
-            .then((data: TreeNodeDefinition[]) => {
-                setFilteredData(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            })
+            .then((data: TreeNodeDefinition[]) => setFilteredData(data))
+            .catch(error => console.error('Error:', error))
             .finally(() => setLoading(false));
     }
 
 
     const handleClick = (node: TreeNodeDefinition) => {
-        console.log(node);
+
+        if (!node.data.id) {
+            return;
+        }
+
+        treeStore.setSelected(node.data)
+        setInputValue("");
     }
 
     return (
@@ -67,10 +68,11 @@ function SearchField() {
             <div className="w-full md:w-80 relative">
                 <div className="flex justify-between">
                     <label htmlFor="search" className="mb-2 text-sm font-medium sr-only text-white">Поиск</label>
-                    <input type="search"
-                           id="search"
-                           placeholder="Фамилия, имя, родословня..."
-                           className={` block w-full p-3 text-sm rounded-l-lg outline-none focus:border-blue-700 bg-black text-${theme.typography.primary} ${theme.backgroundBlur} ${theme.border.color} border`}
+                    <input
+                        type="search"
+                        id="search"
+                        placeholder="Фамилия, имя, родословня..."
+                        className={`block w-full p-3 text-sm outline-none focus:border-blue-700 bg-black text-${theme.typography.primary} ${theme.backgroundBlur} ${theme.border.color} ${theme.border.radius} border`}
                         onChange={debounceFilter}
                      />
                        {/*<button type="submit"  className={`flex justify-center items-center ${theme.typography.primary} end-1.5 bottom-2 ${theme.button.primary} hover:bg-${theme.button.primaryHover} outline-none rounded-r-lg text-sm px-4 py-2 ${theme.border.color} ${theme.backgroundBlur} border bg-black hover:border-blue-700 `}>*/}

@@ -30,6 +30,17 @@ export function TreeInteractiveViewer() {
 
   useEffect(() => {
 
+    if (loading) {
+      return;
+    }
+
+    treeStore.cy.fit();
+
+  }, [loading]);
+
+
+  useEffect(() => {
+
     fetch('/api/get-nodes', {
       method: 'POST',
       body: JSON.stringify({ limit: 1200 }),
@@ -67,13 +78,14 @@ export function TreeInteractiveViewer() {
 
     handleHighlight(evt);
 
-    if (evt.target !== treeStore.cy && !evt.target.isNode()) {
+    const target = evt.target;
+
+    if (target === treeStore.cy || !target.isNode()) {
+      treeStore.setSelected(null);
       return;
     }
 
-    const node = evt.target;
-    treeStore.cy.center(node);
-    treeStore.setSelected(node.data());
+    treeStore.setSelected(target.data());
 
   }
 
@@ -124,9 +136,6 @@ export function TreeInteractiveViewer() {
                   cy={(cy) => {
                       treeStore.cy = cy;
                       cy.on('tap', handleNodeClick);
-                      cy.on('unselect', 'node', () => {
-                        treeStore.setSelected(null);
-                      });
                   }}
               />
           )}
