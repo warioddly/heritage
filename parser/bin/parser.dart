@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:isolate';
 import 'package:parser/bundler.dart';
 import 'package:parser/formatter.dart';
-import 'package:parser/people_model.dart';
 import 'package:parser/scrapy.dart';
 
 

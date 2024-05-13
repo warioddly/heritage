@@ -1,9 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'package:html/parser.dart' as parser;
-import 'package:html/dom.dart';
-import 'package:parser/bundler.dart';
 import 'package:parser/people_model.dart';
 
 class Formatter {

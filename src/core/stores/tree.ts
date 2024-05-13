@@ -4,6 +4,7 @@ import {ECytoscapeLayouts, ETreeHighlight} from "@/core/types/tree";
 
 
 type TTreeStore = {
+    cy: any;
     event: MouseEvent | null;
     selected: TreeNodeDataDefinition | null;
     layout: ECytoscapeLayouts;
@@ -12,9 +13,11 @@ type TTreeStore = {
     setSelected: (selected: TreeNodeDataDefinition | null) => void;
     setHighlightType: (highlightType: ETreeHighlight) => void;
     setEvent: (event: any) => void;
+    setCy: (cy?: any) => void;
 }
 
 export const useTreeStore = create<TTreeStore>((set) => ({
+    cy: null,
     event: null,
     selected: null,
     layout: ECytoscapeLayouts.Dagre,
@@ -23,4 +26,5 @@ export const useTreeStore = create<TTreeStore>((set) => ({
     setSelected: (selected: TreeNodeDataDefinition | null) => set(() => ({ selected })),
     setHighlightType: (highlightType) => set(() => ({ highlightType })),
     setEvent: (event) => set(() => ({ event })),
+    setCy: (cy?: any) => set(() => ({ cy })),
 }))

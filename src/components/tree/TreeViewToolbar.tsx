@@ -29,7 +29,7 @@ function SearchField() {
     const [inputValue, setInputValue] = useState("");
     const [filteredData, setFilteredData] = useState<TreeNodeDefinition[]>([]);
     const [loading, setLoading] = useState(false);
-    const debounceFilter = debounce(handleChange, 1500);
+    const debounceFilter = debounce(handleChange, 1e3);
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
         setInputValue(e.target.value);
@@ -57,6 +57,11 @@ function SearchField() {
             .finally(() => setLoading(false));
     }
 
+
+    const handleClick = (node: TreeNodeDefinition) => {
+        console.log(node);
+    }
+
     return (
         <div className="z-20 fixed top-20 px-4 right-auto w-full md:w-auto md:right-0 md:px-4">
             <div className="w-full md:w-80 relative">
@@ -65,27 +70,14 @@ function SearchField() {
                     <input type="search"
                            id="search"
                            placeholder="Фамилия, имя, родословня..."
-                           className={`
-                      block
-                      w-full
-                      p-3 
-                      text-sm
-                      rounded-l-lg
-                      outline-none
-                      focus:border-blue-700
-                      bg-black
-                      text-${theme.typography.primary}
-                      ${theme.backgroundBlur}
-                      ${theme.border.color}
-                      border`}
+                           className={` block w-full p-3 text-sm rounded-l-lg outline-none focus:border-blue-700 bg-black text-${theme.typography.primary} ${theme.backgroundBlur} ${theme.border.color} border`}
                         onChange={debounceFilter}
                      />
-
-                       <button type="submit"  className={`flex justify-center items-center ${theme.typography.primary} end-1.5 bottom-2 ${theme.button.primary} hover:bg-${theme.button.primaryHover} outline-none rounded-r-lg text-sm px-4 py-2 ${theme.border.color} ${theme.backgroundBlur} border bg-black hover:border-blue-700 `}>
-                           <svg className="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                           </svg>
-                       </button>
+                       {/*<button type="submit"  className={`flex justify-center items-center ${theme.typography.primary} end-1.5 bottom-2 ${theme.button.primary} hover:bg-${theme.button.primaryHover} outline-none rounded-r-lg text-sm px-4 py-2 ${theme.border.color} ${theme.backgroundBlur} border bg-black hover:border-blue-700 `}>*/}
+                       {/*    <svg className="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">*/}
+                       {/*        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>*/}
+                       {/*    </svg>*/}
+                       {/*</button>*/}
                </div>
 
 
@@ -109,7 +101,10 @@ function SearchField() {
                             <ul className="">
                                 {
                                     filteredData.map((node, index) => (
-                                        <li key={index} className={`${theme.typography.primary} text-sm p-2 hover:bg-blue-800 cursor-pointer rounded-md`}>
+                                        <li key={index}
+                                            className={`${theme.typography.primary} text-sm p-2 hover:bg-blue-800 cursor-pointer rounded-md`}
+                                            onClick={() => handleClick(node)}
+                                        >
                                             {node.data.name}
                                         </li>
                                     ))
