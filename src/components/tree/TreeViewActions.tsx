@@ -9,7 +9,7 @@ export function TreeViewActions() {
   const treeStore = useTreeStore();
 
   return (
-      <div className={`flex flex-col gap-2 z-30 fixed ${treeStore.selected ? "top-1/3" : "top-1/2"} px-4 right-0`} role="group">
+      <div className={`flex flex-col gap-2 z-30 fixed ${treeStore.selected ? "sm:top-1/3" : "top-1/2"} md:top-1/2 px-4 right-0`} role="group">
           <TreeViewVariant/>
           {treeStore.selected && <EdgeHighlightVariant/>}
       </div>
@@ -61,7 +61,7 @@ function EdgeHighlightVariant() {
             {
                 treeStore.highlightType !== ETreeHighlight.Predecessors
                     ? (<IconButton
-                        onClick={() => treeStore.setHighlightType(ETreeHighlight.Predecessors)}
+                        onClick={() => treeStore.setHighlightType(null, ETreeHighlight.Predecessors)}
                         icon={
                             (
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -72,7 +72,7 @@ function EdgeHighlightVariant() {
                             )
                         }/>)
                     : (<IconButton
-                        onClick={() => treeStore.setHighlightType(ETreeHighlight.Successors)}
+                        onClick={() => treeStore.setHighlightType(null, ETreeHighlight.Successors)}
                         icon={(
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                                  stroke="currentColor" className="w-6 h-6">

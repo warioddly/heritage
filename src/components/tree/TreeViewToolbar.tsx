@@ -2,10 +2,10 @@
 
 import {ChangeEvent, useState} from "react";
 import {TreeNodeDefinition} from "@/core/types/tree-definition";
-import {debounce} from "@/core/utils/utils";
 import {useTreeStore} from "@/core/stores/tree";
 import {theme} from "@/core/styles/theme";
 import {TreeViewActions} from "@/components/tree/TreeViewActions";
+import {ETreeHighlight} from "@/core/types/tree";
 
 export function TreeViewToolbar() {
 
@@ -22,27 +22,42 @@ export function TreeViewToolbar() {
 }
 
 
+let abortController: AbortController | null = null;
+
 function SearchField() {
 
     const treeStore = useTreeStore();
 
     const [inputValue, setInputValue] = useState("");
     const [filteredData, setFilteredData] = useState<TreeNodeDefinition[]>([]);
+    const [onFocus, setOnFocus] = useState(false);
     const [loading, setLoading] = useState(false);
-    const debounceFilter = debounce(handleChange, 1e3);
+
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
+        if (e.target.value.length < 2) {
+            setFilteredData([]);
+            return;
+        }
+
         setLoading(true);
         setInputValue(e.target.value);
         filter();
     }
 
+
     function filter() {
 
+        if (abortController) {
+            abortController.abort();
+        }
+
+        abortController = new AbortController();
 
         fetch('/api/search-node', {
             method: 'POST',
             body: JSON.stringify({value: inputValue}),
+            signal: abortController.signal
         })
             .then(response => response.json())
             .then((data: TreeNodeDefinition[]) => setFilteredData(data))
@@ -57,9 +72,11 @@ function SearchField() {
             return;
         }
 
-        treeStore.setSelected(node.data)
         setInputValue("");
+        treeStore.setSelected(node.data)
+        treeStore.setHighlightType(null, ETreeHighlight.Predecessors);
     }
+
 
     return (
         <div className="z-20 fixed top-20 px-4 right-auto w-full md:w-auto md:right-0 md:px-4">
@@ -71,7 +88,9 @@ function SearchField() {
                         id="search"
                         placeholder="Фамилия, имя, родословня..."
                         className={`block w-full p-3 text-sm outline-none focus:border-blue-700 bg-black text-${theme.typography.primary} ${theme.backgroundBlur} ${theme.border.color} ${theme.border.radius} border`}
-                        onChange={debounceFilter}
+                        onChange={handleChange}
+                        onFocus={() => setOnFocus(true)}
+                        onBlur={() => setOnFocus(false)}
                      />
                        {/*<button type="submit"  className={`flex justify-center items-center ${theme.typography.primary} end-1.5 bottom-2 ${theme.button.primary} hover:bg-${theme.button.primaryHover} outline-none rounded-r-lg text-sm px-4 py-2 ${theme.border.color} ${theme.backgroundBlur} border bg-black hover:border-blue-700 `}>*/}
                        {/*    <svg className="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">*/}
@@ -82,15 +101,15 @@ function SearchField() {
 
 
                 {
-                    inputValue.length > 0 && filteredData.length === 0 && !loading && (
-                        <div className={`max-h-60 w-full overflow-hidden overflow-y-scroll pt-2 bg-gray-500 ${theme.backgroundBlur} ${theme.border.radius} p-2 mt-2`}>
+                    inputValue.length > 2 && filteredData.length === 0 && !loading && onFocus && (
+                        <div className={`max-h-60 w-full overflow-hidden pt-2 bg-gray-500 ${theme.backgroundBlur} ${theme.border.radius} p-2 mt-2`}>
                             <p className="text-white text-sm">Ничего не найдено</p>
                         </div>
                     )
                 }
 
                 {
-                    loading && (<div className={`max-h-60 w-full overflow-hidden overflow-y-scroll pt-2 bg-gray-500 ${theme.backgroundBlur} ${theme.border.radius} p-2 mt-2`}>
+                    loading && onFocus && (<div className={`max-h-60 w-full overflow-hidden pt-2 bg-gray-500 ${theme.backgroundBlur} ${theme.border.radius} p-2 mt-2`}>
                         <p className={`${theme.typography.primary} text-sm`}>Загрузка...</p>
                     </div>)
                 }
