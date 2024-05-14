@@ -9,8 +9,10 @@ import 'package:parser/people_model.dart';
 class Scrapy {
 
   final visited = <String>{};
+  final queue = <String>{};
   final people = <People>[];
   final bundler = Bundler();
+
 
   Future<void> parse(List<String> args) async {
 
@@ -28,20 +30,23 @@ class Scrapy {
     }
 
     final document = parser.parse(response.body);
-    List<String> children = _getChildren(document);
+    final children = _getChildren(document);
 
     final person = _getPeople(parent, url, document);
 
     people.add(person);
-
     bundler.generate('${jsonEncode(person.toJson())},', 'dynamic_all_data.json', FileMode.append);
 
     if (children.isNotEmpty) {
       final id = _getId(url);
 
-      for (int i = 0; i < children.length; i++) {
-        await parse([id, children[i]]);
+      queue.addAll(children);
+
+      for (final child in children) {
+        await parse([id, child]);
       }
+
+      queue.removeWhere((element) => children.contains(element));
 
     }
 
@@ -49,9 +54,9 @@ class Scrapy {
   }
 
 
-  List<String> _getChildren(Document document) {
+  Set<String> _getChildren(Document document) {
 
-    final urls = <String>[];
+    final urls = <String>{};
 
     final elements = document.querySelector('#app > main > div > div.container.mx-auto.w-full > div.p-3.flex.flex-nowrap.items-start.text-center.mx-auto.w-max.max-w-full.overflow-x-auto > table > tbody');
 
@@ -69,7 +74,7 @@ class Scrapy {
 
           var url = child.children.first.attributes['href'];
 
-          if (url != null && !visited.contains(url)) {
+          if (url != null && !visited.contains(url) && !queue.contains(url)) {
             urls.add(url);
           }
 

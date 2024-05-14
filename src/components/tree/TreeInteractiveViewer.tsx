@@ -30,7 +30,7 @@ export function TreeInteractiveViewer() {
 
     fetch('/api/get-nodes', {
       method: 'POST',
-      body: JSON.stringify({ limit: 4500 }),
+      body: JSON.stringify({ limit: -1 }),
     }).then((res) => res.json()).then((data: TreeNodeDefinition[]) => {
       setGraph(data);
       setLoading(false);

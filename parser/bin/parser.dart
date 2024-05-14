@@ -69,11 +69,11 @@ Future<void> _scrapy() async {
 
   scrapy.visited.addAll({
   'https://www.sanjyra.net/man/1',
-  'https://www.sanjyra.net/man/2',
-  'https://www.sanjyra.net/man/32252'
+  'https://www.sanjyra.net/man/32252',
+  'https://www.sanjyra.net/man/44275'
   });
 
-  await scrapy.parse(['', 'https://www.sanjyra.net/man/44275']);
+  await scrapy.parse(['1', 'https://www.sanjyra.net/man/2']);
 
   print('\n[+] Done! Parsed ${scrapy.people.length} people.');
 
