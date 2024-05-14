@@ -12,18 +12,13 @@ export const cytoscapeThemes: CytoscapeTheme[] = [
             width: 30,
             height: 30,
             label: 'data(name)',
-            'z-index': '10',
             color: 'white',
-            fontSize: 12,
+            fontSize: 10,
         },
     },
     {
         selector: 'node:selected',
         style: {
-            'border-width': '2px',
-            'border-color': '#AAD8FF',
-            'border-opacity': '0.5',
-            'background-color': '#77828C',
             width: 30,
             height: 30,
             'text-outline-color': '#77828C',
@@ -43,7 +38,7 @@ export const cytoscapeThemes: CytoscapeTheme[] = [
             "line-color": "#2a3e79",
             'target-arrow-color': '#2a3e79',
             'target-arrow-shape': 'triangle',
-            'curve-style': 'bezier',
+            'curve-style': 'haystack',
         },
     },
     {
@@ -51,7 +46,6 @@ export const cytoscapeThemes: CytoscapeTheme[] = [
         style: {
             'line-color': '#d30000',
             'target-arrow-color': '#d30000',
-            'opacity': 0.7,
         }
     }
 ];

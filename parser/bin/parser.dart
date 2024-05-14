@@ -92,7 +92,7 @@ void _formatter(String path) {
   final bundler = Bundler();
   final formatter = Formatter();
 
-  final data = jsonDecode(File(path).readAsStringSync());
+  final data = List<Map<String, dynamic>>.from(jsonDecode(File(path).readAsStringSync()));
 
   final normalData = formatter.fromCytoscapeToNormal(data);
   final cytoscapeData = formatter.fromNormalToCytoscape(normalData);

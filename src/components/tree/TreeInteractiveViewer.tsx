@@ -30,7 +30,7 @@ export function TreeInteractiveViewer() {
 
     fetch('/api/get-nodes', {
       method: 'POST',
-      body: JSON.stringify({ limit: -1 }),
+      body: JSON.stringify({ limit: 14000 }),
     }).then((res) => res.json()).then((data: TreeNodeDefinition[]) => {
       setGraph(data);
       setLoading(false);
@@ -84,6 +84,7 @@ export function TreeInteractiveViewer() {
                   motionBlur={true}
                   headless={false}
                   wheelSensitivity={1.0}
+                  pixelRatio={1}
                   style={{ width: '100vw', height: '100vh' }}
                   cy={(cy: cytoscape.Core) => {
                       treeStore.cy = cy;
