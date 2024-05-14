@@ -1,5 +1,4 @@
 import {NextResponse} from "next/server";
-import * as fs from "fs";
 import {getApiData} from "@/core/utils/api-utils";
 import {TreeNodeDefinition} from "@/core/types/tree-definition";
 

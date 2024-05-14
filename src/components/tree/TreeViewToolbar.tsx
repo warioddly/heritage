@@ -124,7 +124,7 @@ function SearchField() {
                                             className={`${theme.typography.primary} text-sm p-2 hover:bg-blue-800 cursor-pointer rounded-md`}
                                             onClick={() => handleClick(node)}
                                         >
-                                            {node.data.name}
+                                            {node.data.fullName || node.data.name}
                                         </li>
                                     ))
                                 }

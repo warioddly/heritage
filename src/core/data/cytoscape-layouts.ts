@@ -26,6 +26,7 @@ export const cytoscapeLayouts: { [key in ECytoscapeLayouts]: any; }  = {
         nodeDimensionsIncludeLabels: true,
         randomize: false,
         handleDisconnected: false,
+        locked: true,
         convergenceThreshold: .01,
     },
 }

@@ -1,14 +1,14 @@
 [
   {
-    "data": {
-      "id": "1",
-      "source": "",
-      "name": "Долон бий",
-      "fullName": "Долон бий",
-      "bio": "-",
-      "url": "https://www.sanjyra.net/man/1"
-    }
-  },
+  "data": {
+    "id": "1",
+    "source": "",
+    "name": "Долон бий",
+    "fullName": "-",
+    "bio": "-",
+    "url": "https://www.sanjyra.net/man/1"
+  }
+},
   {
     "data": {
       "id": "32252",
@@ -49329,6 +49329,7 @@
       "url": "https://www.sanjyra.net/man/63044"
     }
   },
+
   {
     "data": {
       "id": "44275",

@@ -28,13 +28,20 @@ export function TreeInteractiveViewer() {
 
   useEffect(() => {
 
-    fetch('/api/get-nodes', {
-      method: 'POST',
-      body: JSON.stringify({ limit: 14000 }),
-    }).then((res) => res.json()).then((data: TreeNodeDefinition[]) => {
-      setGraph(data);
-      setLoading(false);
-    });
+    fetch('/api/get-cy-nodes')
+        .then((res) => res.json())
+        .then((data) => {
+            treeStore.cy?.json(data);
+            setLoading(false);
+        })
+
+    // fetch('/api/get-nodes', {
+    //   method: 'POST',
+    //   body: JSON.stringify({ limit: -1 }),
+    // }).then((res) => res.json()).then((data: TreeNodeDefinition[]) => {
+    //   setGraph(data);
+    //   setLoading(false);
+    // });
 
   }, []);
 
@@ -69,29 +76,27 @@ export function TreeInteractiveViewer() {
   return (
       <div className="flex">
 
-          {!loading && (
-              <CytoscapeComponent
-                  elements={graph}
-                  hideEdgesOnViewport={true}
-                  textureOnViewport={true}
-                  stylesheet={cytoscapeThemes as any}
-                  layout={layout}
-                  zoomingEnabled={true}
-                  maxZoom={1}
-                  minZoom={0.1}
-                  autounselectify={false}
-                  boxSelectionEnabled={false}
-                  motionBlur={true}
-                  headless={false}
-                  wheelSensitivity={1.0}
-                  pixelRatio={1}
-                  style={{ width: '100vw', height: '100vh' }}
-                  cy={(cy: cytoscape.Core) => {
-                      treeStore.cy = cy;
-                      cy.on('tap', handleNodeClick);
-                  }}
-              />
-          )}
+        <CytoscapeComponent
+            elements={graph}
+            hideEdgesOnViewport={true}
+            textureOnViewport={true}
+            stylesheet={cytoscapeThemes as any}
+            layout={layout}
+            zoomingEnabled={true}
+            maxZoom={1}
+            autolock={true}
+            minZoom={0.01}
+            autounselectify={false}
+            boxSelectionEnabled={false}
+            motionBlur={true}
+            wheelSensitivity={1.0}
+            pixelRatio={1}
+            style={{ width: '100vw', height: '100vh' }}
+            cy={(cy: cytoscape.Core) => {
+              treeStore.cy = cy;
+              cy.on('tap', handleNodeClick);
+            }}
+        />
 
         <TreePersonInfoDrawer />
 

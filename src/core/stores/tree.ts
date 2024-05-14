@@ -44,7 +44,7 @@ export const useTreeStore = create<TTreeStore>((set, get) => ({
 
         get().highlightedNodes?.removeClass('highlighted');
 
-        if ((_event.target === get().cy || _event.target.group() == "edges")) {
+        if (!_event.target || (_event.target === get().cy || _event.target.group() == "edges")) {
             return;
         }
 
