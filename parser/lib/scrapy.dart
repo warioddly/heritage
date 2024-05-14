@@ -8,7 +8,7 @@ import 'package:parser/people_model.dart';
 
 class Scrapy {
 
-  final _visited = <String>{};
+  final visited = <String>{};
   final people = <People>[];
   final bundler = Bundler();
 
@@ -69,7 +69,7 @@ class Scrapy {
 
           var url = child.children.first.attributes['href'];
 
-          if (url != null && !_visited.contains(url)) {
+          if (url != null && !visited.contains(url)) {
             urls.add(url);
           }
 
@@ -83,11 +83,11 @@ class Scrapy {
 
 
   bool _crawl(String url) {
-    if (_visited.contains(url)) {
+    if (visited.contains(url)) {
       print('[-] Already crawled: $url');
       return false;
     }
-    _visited.add(url);
+    visited.add(url);
     print('[+] Crawling $url');
     return true;
   }

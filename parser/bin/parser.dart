@@ -49,19 +49,39 @@ void main(List<String> arguments) async {
 
 
 Future<void> _scrapy() async {
+
   print('[+] Scrapy started.');
 
   final scrapy = Scrapy();
 
-  await scrapy.parse(['', 'https://www.sanjyra.net/man/1']);
+  void bundler() {
+    Bundler()
+      ..generate(jsonEncode(scrapy.people.map((e) => e.toJson()).toList()), 'all_data.json')
+      ..generate(jsonEncode(scrapy.people.map((e) => e.toCytoscapeJson()).toList()), 'all_data_site.json');
+  }
+
+
+  ProcessSignal.sigint.watch().listen((event) {
+    bundler();
+    print('\n[+] Exiting...');
+    exit(0);
+  });
+
+  scrapy.visited.addAll({
+  'https://www.sanjyra.net/man/1',
+  'https://www.sanjyra.net/man/2',
+  'https://www.sanjyra.net/man/32252'
+  });
+
+  await scrapy.parse(['', 'https://www.sanjyra.net/man/44275']);
 
   print('\n[+] Done! Parsed ${scrapy.people.length} people.');
 
-  Bundler()
-    ..generate(jsonEncode(scrapy.people.map((e) => e.toJson())), 'all_data.json')
-    ..generate(jsonEncode(scrapy.people.map((e) => e.toCytoscapeJson())), 'all_data_site.json');
+  bundler();
 
   print('[+] Scrapy finished.');
+  exit(0);
+
 }
 
 
