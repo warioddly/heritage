@@ -72,6 +72,8 @@ export function TreeInteractiveViewer() {
           {!loading && (
               <CytoscapeComponent
                   elements={graph}
+                  hideEdgesOnViewport={true}
+                  textureOnViewport={true}
                   stylesheet={cytoscapeThemes as any}
                   layout={layout}
                   zoomingEnabled={true}
@@ -79,6 +81,9 @@ export function TreeInteractiveViewer() {
                   minZoom={0.1}
                   autounselectify={false}
                   boxSelectionEnabled={false}
+                  motionBlur={true}
+                  headless={false}
+                  wheelSensitivity={1.0}
                   style={{ width: '100vw', height: '100vh' }}
                   cy={(cy: cytoscape.Core) => {
                       treeStore.cy = cy;
